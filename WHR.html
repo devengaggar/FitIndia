@@ -4,135 +4,97 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>FitIndia.pro — WHR (Waist–Hip Ratio) & 30-Day Plan</title>
+<meta name="theme-color" content="#06038d">
 <style>
-  :root{ --white:#ffffff; --ink:#0f172a; --muted:#475569; --line:#e5e7eb; --blue:#2563eb; --green:#10b981; --orange:#f97316; --yellow:#fde047;--blue:#6991ff; }
+  :root{
+    --white:#ffffff;
+    --ink:#0f172a;
+    --muted:#475569;
+    --line:#e5e7eb;
+    --blue:#6991ff;           /* unified (only once) */
+    --green:#10b981;
+    --orange:#f97316;
+    --yellow:#fde047;
+  }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{margin:0;background:#fff;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif}
   a{color:inherit;text-decoration:none}
+  img{max-width:100%;height:auto;display:block}
   .wrap{max-width:1140px;margin:0 auto;padding:0 20px}
 
-  /* NAV */
-    .nav{
-      position: sticky;
-      top: 0;
-      background: #fff;
-      border-bottom: 1px solid var(--line);
-      z-index: 90;
-      height: 60px;              /* fixed bar height (unchanged) */
-    }
-    .nav-inner{
-      height: 100%;
-      display: flex;
-      align-items: center;       /* vertical centering for all children */
-      justify-content: space-between;
-      gap: 12px;
-      /* no vertical padding so bar stays 60px */
-    }
+  /* NAV (fixed 60px, brand rules per spec) */
+  .nav{
+    position:sticky; top:0; background:#fff; border-bottom:1px solid var(--line);
+    z-index:90; height:60px;
+  }
+  .nav-inner{
+    height:100%; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .brand-logo{
+    position:relative; height:100%; width:15%; display:block; min-width:120px;
+  }
+  .brand-logo img{
+    position:absolute; left:0; right:0; top:50%;
+    transform:translateY(-50%);
+    height:60px; width:auto; margin:0 auto; /* fills bar, no overflow */
+  }
 
-    /* ---- BIG LOGO without changing navbar height ---- */
-    .brand-logo{
-      position: relative;
-      height: 100%;              /* matches 60px bar */
-      width: 15%;              /* reserves layout space so tabs don't collide; tweak as needed */
-      display: block;
-      /* Optional: if you don't want the logo to overlap tabs when narrowed, reduce width */
-    }
-    .brand-logo img{
-      position: absolute;
-      left: 0; right: 0;         /* horizontally center via translateX below */
-      top: 50%;
-      transform: translateY(-50%); /* perfect vertical center */
-      height: 60px;              /* 👈 bigger than navbar (increase/decrease as desired) */
-      width: auto;
-      display: block;            /* avoid baseline issues */
-      margin: 0;            /* horizontal centering when left/right set */
-      pointer-events: auto;
-    }
-/* Dropdown container */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
+  .tabs{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .tabs a, .dropbtn{
+    padding:8px 10px; border-radius:10px; color:var(--muted); font-weight:700; line-height:1; outline:none;
+  }
+  .tabs a:hover, .dropbtn:hover{background:#f8fafc;color:#0b1324}
+  .tabs a:focus-visible, .dropbtn:focus-visible{outline:2px solid #93c5fd; outline-offset:2px}
+  .tabs a.active{background:#eef2ff;color:#0b1324}
 
-/* Dropdown trigger (looks like other nav links) */
-.dropbtn {
-  display: inline-block;
-  padding: 8px 10px;
-  border-radius: 10px;
-  color: var(--muted);
-  font-weight: 700;
-  text-decoration: none;   /* behave like <a> */
-}
+  .cta{display:flex;gap:10px;align-items:center}
+  .btn{padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
+  .btn.primary{
+    /* fixed: valid gradient with two stops */
+    background:linear-gradient(90deg,var(--ink));
+    color:#fff;border:0;
+  }
+  .btn:focus-visible{outline:2px solid #93c5fd; outline-offset:2px}
 
-/* Hover matches other links */
-.dropbtn:hover {
-  background: #f8fafc;
-  color: #0b1324;
-}
-
-/* Dropdown content */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  min-width: 140px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  z-index: 999;
-}
-
-.dropdown-content a {
-  display: block;
-  padding: 8px 12px;
-  color: var(--muted);
-  font-weight: 600;
-  border-radius: 6px;
-}
-
-.dropdown-content a:hover {
-  background: #f8fafc;
-  color: #0b1324;
-}
-
-/* Show dropdown on hover */
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-
-       .tabs{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    .tabs a{padding:8px 10px;border-radius:10px;color:var(--muted);font-weight:700;line-height:1}
-    .tabs a:hover{background:#f8fafc;color:#0b1324}
-    .tabs a.active{background:#eef2ff;color:#0b1324}
-    .cta{display:flex;gap:10px;align-items:center}
-    .btn{padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
-    .btn.primary{background:linear-gradient(90deg,var(--ink));color:#ffffff;border:0}
-
-
-
-
+  /* DROPDOWN (hover + click for mobile) */
+  .dropdown{position:relative; display:inline-block}
+  .dropbtn{display:inline-block}
+  .dropdown-content{
+    display:none; position:absolute; top:100%; left:0; background:#fff; min-width:160px;
+    box-shadow:0 4px 8px rgba(0,0,0,0.1); border:1px solid var(--line); border-radius:8px; z-index:999;
+    padding:6px;
+  }
+  .dropdown-content a{display:block; padding:8px 10px; border-radius:8px; font-weight:600; color:var(--muted)}
+  .dropdown-content a:hover{background:#f8fafc;color:#0b1324}
+  /* hover (desktop) */
+  .dropdown:hover .dropdown-content{display:block}
+  /* .dropdown.open is toggled by JS (mobile/tap/keyboard) */
+  .dropdown.open .dropdown-content{display:block}
 
   /* HERO */
-    .hero{background:linear-gradient(180deg,#fff,var(--blue) 100%)}
-    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;height:250px;padding:36px 0}
-    @media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
-    h1{font-size:clamp(1.7rem,3.6vw,2.6rem);margin:0 0 10px}
-    .sub{color:#0b1324b0}
-    .hero-card{background:#ffffff;border:1px solid var(--line);border-radius:18px;padding:18px}
+  .hero{background:linear-gradient(180deg,#fff,var(--blue) 100%)}
+  .hero-grid{
+    display:grid; grid-template-columns:1.2fr .8fr; gap:24px; min-height:240px; padding:28px 0 32px;
+  }
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr; gap:16px; padding:20px 0 24px}
+  }
 
+  h1{font-size:clamp(1.7rem,3.6vw,2.6rem);margin:0 0 10px}
+  h2.section-title{font-size:clamp(1.2rem,2.3vw,1.7rem);margin:0 0 12px;display:flex;align-items:center;gap:10px}
+  .sub{color:#0b1324b0}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 6px rgba(253,224,71,.35)}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
 
   /* SECTIONS */
-  section{padding:36px 0;border-bottom:1px solid var(--line)}
-  .section-title{font-size:clamp(1.2rem,2.3vw,1.7rem);margin:0 0 12px;display:flex;align-items:center;gap:10px}
-  .dot{width:10px;height:10px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 6px rgba(253,224,71,.35)}
+  section{padding:28px 0;border-bottom:1px solid var(--line)}
+
   .muted{color:var(--muted)}
   .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
   @media(max-width:900px){.grid3{grid-template-columns:1fr}}
-  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+
   .card img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:10px;background:#f1f5f9}
 
   /* FORM / OUTPUT */
@@ -140,11 +102,15 @@
   @media(max-width:900px){.row{grid-template-columns:1fr}}
   .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
   input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line)}
-  .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef2ff;border:1px solid #c7d2fe;font-weight:700}
-  .ok{background:#dcfce7;border-color:#bbf7d0}
-  .warn{background:#ffedd5;border-color:#fed7aa}
-  .risk{background:#fee2e2;border-color:#fecaca}
+  input:focus-visible, select:focus-visible, textarea:focus-visible{outline:2px solid #93c5fd; outline-offset:2px}
+
+  .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef2ff;border:1px solid #c7d2fe;font-weight:700;color:var(--muted)}
+  .pill.ok{background:#dcfce7;border-color:#bbf7d0}
+  .pill.warn{background:#fff6b0;border:1px dashed #eab308;color:#3f2d00}
+  .pill.risk{background:#fee2e2;border-color:#fecaca}
+
   details summary{cursor:pointer;font-weight:800}
+  details > summary:focus-visible{outline:2px solid #93c5fd; outline-offset:4px}
 
   /* FOOTER */
   footer{background:#0b1324;color:#dbeafe}
@@ -154,72 +120,57 @@
   .social a{display:inline-flex;align-items:center;gap:6px;background:#0a1228;border:1px solid #1e3a8a;border-radius:999px;padding:6px 10px;color:#c7d2fe}
   .credit{border-top:1px solid #172554;padding:12px 0;color:#9db2d8}
 
- /* DIALOGS */
-    dialog{border:1px solid var(--line);border-radius:16px;padding:0;max-width:560px;width:92%}
-    dialog::backdrop{background:rgba(2,6,23,.35)}
-    dialog[open]{display:block;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;box-shadow:0 20px 60px rgba(2,6,23,.25)}
-    .dlg-backdrop{position:fixed;inset:0;background:rgba(2,6,23,.35);z-index:9998}
-    .dlg-hd{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-    .dlg-bd{padding:16px}
-    textarea{min-height:80px}
-    .tabbar{display:flex;gap:6px;margin-bottom:10px}
-    .tabbar button{flex:1}
-  
-  .hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-  .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f8fafc;border:1px solid var(--line);font-weight:700;color:var(--muted)}
-  /* status variants that fit your palette */
-  .pill.ok{background:#dcfce7;border-color:#bbf7d0}
-  .pill.warn{background:#fff6b0;border:1px dashed #eab308;color:#3f2d00}
-  .pill.risk{background:#fee2e2;border-color:#fecaca}
+  /* DIALOGS (kept minimal; safe if not present) */
+  dialog{border:1px solid var(--line);border-radius:16px;padding:0;max-width:560px;width:92%}
+  dialog::backdrop{background:rgba(2,6,23,.35)}
+  dialog[open]{display:block;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;box-shadow:0 20px 60px rgba(2,6,23,.25)}
+  .dlg-backdrop{position:fixed;inset:0;background:rgba(2,6,23,.35);z-index:9998}
+  .dlg-hd{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .dlg-bd{padding:16px}
+  .tabbar{display:flex;gap:6px;margin-bottom:10px}
+  .tabbar button{flex:1}
 
-/* === Gauge (shared with BMI) === */
-.gauge { width: 100%; max-width: 420px; margin: 10px 0; }
-.gauge svg { display:block; width:100%; height:auto; }
-.gauge .tick { font: 600 10px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif; fill:#475569 }
-.gauge .label { font: 700 12px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif; fill:#0f172a }
-.gauge .readout { font: 800 18px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif; fill:#0f172a }
-.gauge .needle { transition: transform 0.9s cubic-bezier(.22,1,.36,1); transform-origin: 210px 210px; }
-.gauge .hub { fill:#0f172a }
+  /* Gauge */
+  .gauge{width:100%;max-width:420px;margin:10px 0}
+  .gauge svg{display:block;width:100%;height:auto}
+  .gauge .tick{font:600 10px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif; fill:#475569}
+  .gauge .label{font:700 12px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif; fill:#0f172a}
+  .gauge .readout{font:800 18px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif; fill:#0f172a}
+  .gauge .needle{transition:transform .9s cubic-bezier(.22,1,.36,1); transform-origin:210px 210px}
+  .gauge .hub{fill:#0f172a}
 
-
+  @media (prefers-reduced-motion: reduce){
+    .gauge .needle{transition:none}
+    html:focus-within{scroll-behavior:auto}
+  }
 </style>
 </head>
 <body>
- <!-- NAV -->
+  <!-- NAV -->
   <nav class="nav" aria-label="Primary">
     <div class="wrap nav-inner">
-      <!-- NOTE: Use a relative path in production; file:// only for local testing -->
       <a href="index.html" class="brand-logo" aria-label="FitIndia Home">
-        <img
-          src="img/Fit-India-Logo.png"
-          alt="FitIndia.pro logo">
+        <img src="img/Fit-India-Logo.png" alt="FitIndia.pro logo">
       </a>
 
-    <div class="tabs" role="navigation" aria-label="Primary links">
-  <a id="homeTop" href="index.html" target="_self">Home</a>
-  <a id="servicesTop" href="services.html" target="_self">Services</a>
-   <a id="AnnouncementsTop" href="Announcements.html" target="_self">Announcements</a>
+      <div class="tabs" role="navigation" aria-label="Primary links">
+        <a id="homeTop" href="index.html" target="_self">Home</a>
+        <a id="servicesTop" href="services.html" target="_self">Services</a>
+        <a id="AnnouncementsTop" href="Announcements.html" target="_self">Announcements</a>
 
-  <!-- TOOLS DROPDOWN -->
- <div class="dropdown">
-  <a href="#" class="dropbtn">Tools ▾</a>
-  <div class="dropdown-content">
-    <a id="navBMI" href="Bmi-cal.html" target="_self">BMI</a>
-    <a id="navWHR" href="WHR.html" target="_self">WHR</a>
-  </div>
-</div>
+        <!-- Tools dropdown -->
+        <div class="dropdown" id="toolsMenu">
+          <button class="dropbtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="toolsList">Tools ▾</button>
+          <div class="dropdown-content" id="toolsList" role="menu">
+            <a id="navBMI" href="Bmi-cal.html" target="_self" role="menuitem">BMI</a>
+            <a id="navWHR" href="WHR.html" target="_self" role="menuitem" class="active">WHR</a>
+          </div>
+        </div>
 
-
-  <a id="aboutTop" href="about-us.html" target="_self">About Us</a>
-</div>
-
-    
-  </div>
-</nav>
-
-
-
-
+        <a id="aboutTop" href="about-us.html" target="_self">About Us</a>
+      </div>
+    </div>
+  </nav>
 
   <!-- HERO -->
   <header class="hero" id="whr">
@@ -248,22 +199,27 @@
           <div class="field"><label>Hip (cm)<input id="hip" type="number" min="50" max="200" step="0.1" placeholder="94"></label></div>
         </div>
         <div class="row">
-          <div class="field"><label>Sex at birth
-            <select id="sex"><option value="female">Female</option><option value="male">Male</option></select>
-          </label></div>
+          <div class="field">
+            <label>Sex at birth
+              <select id="sex">
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
+            </label>
+          </div>
         </div>
+
         <div class="cta" style="margin-top:8px;flex-wrap:wrap;align-items:center;gap:10px">
-  <button class="btn primary" id="calcWHR">Calculate WHR</button>
-  <button class="btn" id="resetWHR" style="display:none">Reset</button>
-  <span id="whrVal" class="pill" style="display:none"></span>
-</div>
+          <button class="btn primary" id="calcWHR">Calculate WHR</button>
+          <button class="btn" id="resetWHR" style="display:none">Reset</button>
+          <span id="whrVal" class="pill" style="display:none"></span>
+        </div>
 
-<!-- Dial shows only after a successful calculation -->
-<div id="whrDial" class="gauge" aria-live="polite" style="display:none"></div>
+        <!-- Dial shows only after a successful calculation -->
+        <div id="whrDial" class="gauge" aria-live="polite" style="display:none"></div>
 
-<p id="whrMsg" class="muted" style="margin-top:6px"></p>
-<p id="whrTarget" class="pill" style="display:none;margin-top:8px"></p>
-
+        <p id="whrMsg" class="muted" style="margin-top:6px"></p>
+        <p id="whrTarget" class="pill" style="display:none;margin-top:8px"></p>
       </div>
     </div>
   </section>
@@ -278,12 +234,19 @@
           <div class="field"><label>Age (years)<input id="age" type="number" min="12" max="100" placeholder="28"></label></div>
         </div>
         <div class="row">
-          <div class="field"><label>Diet preference
-            <select id="diet"><option>Vegetarian</option><option>Vegan</option><option>Eggetarian</option><option>Non-veg</option></select>
-          </label></div>
+          <div class="field">
+            <label>Diet preference
+              <select id="diet">
+                <option>Vegetarian</option><option>Vegan</option><option>Eggetarian</option><option>Non-veg</option>
+              </select>
+            </label>
+          </div>
           <div class="field"><label>Dietary restrictions (optional)<input id="restrict" type="text" placeholder="e.g., Jain, no peanuts, low lactose"></label></div>
         </div>
-        <div class="cta" style="margin-top:8px"><button class="btn primary" id="buildPlan">Generate 30-Day Plan</button> <button class="btn" id="reset">Reset</button></div>
+        <div class="cta" style="margin-top:8px">
+          <button class="btn primary" id="buildPlan">Generate 30-Day Plan</button>
+          <button class="btn" id="reset">Reset</button>
+        </div>
       </div>
     </div>
   </section>
@@ -311,17 +274,15 @@
     </div>
   </section>
 
-
-
   <!-- FOOTER -->
   <footer>
     <div class="wrap foot">
       <div><h3 style="margin:0 0 8px">FitIndia.pro</h3><p>Your partner in evidence-based weight care.</p></div>
       <div><h4>Pages</h4>
         <ul style="list-style:none;padding:0;line-height:1.9">
-            <li><a href="about-us.html" target="_self">About Us</a></li>
+          <li><a href="about-us.html" target="_self">About Us</a></li>
           <li><a href="services.html" target="_self">Services</a></li>
-  <li><a id="AnnouncementsTop" href="Announcements.html" target="_self">Announcements</a></li>
+          <li><a href="Announcements.html" target="_self">Announcements</a></li>
         </ul>
       </div>
       <div><h4>Follow us</h4>
@@ -336,15 +297,11 @@
     <div class="wrap credit">© <span id="year"></span> FitIndia.pro • All rights reserved.</div>
   </footer>
 
- <!-- AUTH DIALOG (Login + Sign Up) -->
-  
-
-
 <script>
 (() => {
   'use strict';
 
-  /* ========== Tiny helpers ========== */
+  /* ===== Helpers ===== */
   const $  = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
 
@@ -358,7 +315,7 @@
     localStorage.setItem(METRIC_KEY(email), JSON.stringify({ ...cur, ...obj }));
   }
 
-  /* ========== Footer year + smooth in-page links ========== */
+  /* ===== Footer year & smooth scroll ===== */
   const yearEl = $('#year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
   $$('.tabs a[href^="#"], footer a[href^="#"]').forEach(a => {
     a.addEventListener('click', (e) => {
@@ -367,7 +324,22 @@
     });
   });
 
-  /* ========== Dialog helpers (single, robust version) ========== */
+  /* ===== Dropdown: mobile/keyboard toggle ===== */
+  const toolsMenu = $('#toolsMenu');
+  if (toolsMenu){
+    const btn = toolsMenu.querySelector('.dropbtn');
+    const list = toolsMenu.querySelector('.dropdown-content');
+    const close = () => { toolsMenu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); };
+    const open  = () => { toolsMenu.classList.add('open'); btn.setAttribute('aria-expanded','true'); };
+    btn.addEventListener('click', (e)=>{ e.stopPropagation(); toolsMenu.classList.contains('open') ? close() : open(); });
+    document.addEventListener('click', (e)=>{ if (!toolsMenu.contains(e.target)) close(); });
+    btn.addEventListener('keydown', (e)=>{
+      if (e.key === 'ArrowDown'){ open(); list?.querySelector('a')?.focus(); }
+      if (e.key === 'Escape'){ close(); btn.focus(); }
+    });
+  }
+
+  /* ===== Dialog helpers (safe if dialog not present) ===== */
   const supportsDialog = (typeof HTMLDialogElement !== 'undefined')
     && (typeof document.createElement('dialog').showModal === 'function');
 
@@ -376,10 +348,7 @@
     if (!dlg) return;
     if (supportsDialog) {
       try { dlg.showModal(); }
-      catch(e){ // if already open, reset and try again
-        dlg.removeAttribute('open');
-        setTimeout(() => dlg.showModal(), 0);
-      }
+      catch(e){ dlg.removeAttribute('open'); setTimeout(() => dlg.showModal(), 0); }
     } else {
       dlg.setAttribute('open','');
       let bg = document.querySelector(`.dlg-backdrop[data-for="${id}"]`);
@@ -392,7 +361,6 @@
       }
     }
   }
-
   function closeDialog(dlg){
     if (!dlg) return;
     if (supportsDialog && typeof dlg.close === 'function') dlg.close();
@@ -400,8 +368,6 @@
     const bg = document.querySelector(`.dlg-backdrop[data-for="${dlg.id}"]`);
     if (bg) bg.remove();
   }
-
-  // Global Esc closes any open dialog
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       const d = document.querySelector('dialog[open]');
@@ -409,35 +375,25 @@
     }
   });
 
-  // Ensure the × button closes the dialog (native or fallback)
-  const dlgEl = document.getElementById('authDlg');
-  const closeBtn = document.querySelector('#authDlg .dlg-close');
-  if (closeBtn && dlgEl) {
-    closeBtn.addEventListener('click', (e) => { e.preventDefault(); closeDialog(dlgEl); });
-  }
-
-  /* ========== Auth state + header button ========== */
+  /* ===== Auth state button (safe if button/dialog absent) ===== */
   let isAuthed = !!getSessionEmail();
-  let pendingBuild = false;         // used by WHR flow after login
-  let showLoginFn = null;           // will be set by authUI once ready
+  let pendingBuild = false;
+  let showLoginFn = null;
 
   function flipAuthButton(){
     const email = getSessionEmail();
     const authBtn = document.getElementById('openAuth');
     if (!authBtn) return;
-
     if (email){
       authBtn.textContent = 'Go to Dashboard';
       authBtn.onclick = () => location.assign('Dashboard.html');
     } else {
-      authBtn.textContent = '';
+      authBtn.textContent = 'Login / Sign up';
       authBtn.onclick = () => { if (typeof showLoginFn === 'function') showLoginFn(); openDialog('authDlg'); };
     }
   }
-  // initial draw (showLoginFn wired shortly below, then we call flip again)
   flipAuthButton();
 
-  /* ========== Auth UI (demo, front-end only) ========== */
   (function authUI(){
     const dlg = document.getElementById('authDlg'); if (!dlg) return;
 
@@ -458,8 +414,8 @@
     const loginSubmit = document.getElementById('loginSubmit');
     const signupSubmit= document.getElementById('signupSubmit');
 
-    function setError(msg){ authError.textContent = msg; authError.style.display = 'inline-block'; }
-    function clearError(){ authError.style.display='none'; authError.textContent=''; }
+    function setError(msg){ if (authError){ authError.textContent = msg; authError.style.display = 'inline-block'; } }
+    function clearError(){ if (authError){ authError.style.display='none'; authError.textContent=''; } }
 
     function showLogin(){
       if (authTitle) authTitle.textContent='Login';
@@ -477,22 +433,18 @@
       tabSignup?.setAttribute('aria-selected','true'); tabLogin?.removeAttribute('aria-selected');
       clearError();
     }
-
-    // expose so we can call it before opening, ensuring first-open has correct styling
     showLoginFn = showLogin;
 
     tabLogin?.addEventListener('click', showLogin);
     tabSignup?.addEventListener('click', showSignup);
     linkToSignup?.addEventListener('click', (e)=>{ e.preventDefault(); showSignup(); });
     linkToLogin ?.addEventListener('click', (e)=>{ e.preventDefault(); showLogin(); });
-    dlg.addEventListener('close', showLogin); // reset on each close
+    dlg.addEventListener('close', showLogin);
 
-    // simple "db" for demo
     const KEY='fitindia_users';
     const getUsers=()=>{ try { return JSON.parse(localStorage.getItem(KEY))||[]; } catch { return []; } };
     const setUsers=(arr)=>localStorage.setItem(KEY, JSON.stringify(arr));
     const hash=(s)=>btoa(unescape(encodeURIComponent(s))); // demo only
-
     let lastAuthEmail = null;
 
     loginSubmit?.addEventListener('click', (e)=>{
@@ -502,7 +454,7 @@
       if(!email || !pwd){ e.preventDefault(); setError('Please enter email and password.'); return; }
       const u = getUsers().find(x=>x.email===email);
       if(!u || u.hash!==hash(pwd)){ e.preventDefault(); setError('Invalid email or password.'); return; }
-      lastAuthEmail = email; // allow dialog to close with value="ok"
+      lastAuthEmail = email;
     });
 
     signupSubmit?.addEventListener('click', (e)=>{
@@ -517,7 +469,7 @@
       const users = getUsers();
       if(users.some(x=>x.email===email)){ e.preventDefault(); setError('Account already exists. Try logging in.'); return; }
       users.push({email, name, hash:hash(pwd)}); setUsers(users);
-      lastAuthEmail = email; // allow dialog to close with value="ok"
+      lastAuthEmail = email;
     });
 
     dlg.addEventListener('close', ()=>{
@@ -530,12 +482,11 @@
       }
     });
 
-    // after wiring showLoginFn, fix the header button so it calls showLogin() before open
     flipAuthButton();
   })();
 
-  /* ========== WHR calculator (page-specific) ========== */
-  let lastWHR = null, lastCat = '', riskLabel = ''; // 'Low' | 'Moderate' | 'High'
+  /* ===== WHR Calculator ===== */
+  let lastWHR = null, lastCat = '', riskLabel = '';
   let waistCm = 0, hipCm = 0, sex = 'female';
 
   const waistEl   = document.getElementById('waist');
@@ -583,7 +534,6 @@
       whrTarget.style.display = 'inline-block';
     }
 
-    // Save to metrics if logged in
     const email = getSessionEmail();
     if (email){
       saveMetrics(email, {
@@ -591,12 +541,11 @@
       });
     }
 
-    // reveal personalise form
     const fc = document.getElementById('formCard');
     if (fc){ fc.style.display='block'; fc.scrollIntoView({behavior:'smooth'}); }
   });
 
-  // Reset
+  // Reset (form section)
   document.getElementById('reset')?.addEventListener('click', () => {
     ['waist','hip','name','age','restrict'].forEach(id => { const el = document.getElementById(id); if (el) el.value=''; });
     const dietSel = document.getElementById('diet'); if (dietSel) dietSel.selectedIndex = 0;
@@ -621,7 +570,7 @@
     buildPlanNow();
   });
 
-  /* ========== Plan builder ========== */
+  /* ===== Plan builder ===== */
   function buildPlanNow(){
     const name = (document.getElementById('name')?.value||'').trim();
     const age  = parseInt(document.getElementById('age')?.value||'',10);
@@ -787,149 +736,139 @@ ${mealOut}
       };
     }
   }
-})();
-</script>
-<script>
-(() => {
-  'use strict';
 
-  // 1) Get controls
+  /* ===== Gauge (single build) ===== */
   const calcBtn  = document.getElementById('calcWHR');
   const resetBtn = document.getElementById('resetWHR');
   const dialWrap = document.getElementById('whrDial');
-  if (!calcBtn || !resetBtn || !dialWrap) return;
+  if (calcBtn && resetBtn && dialWrap){
+    let setWHR = null;
+    (function buildGauge(){
+      const MIN = 0.60, MAX = 1.20;
+      const SEGMENTS = [
+        { from: 0.60, to: 0.80, color:'#22c55e', label:'Std'  },
+        { from: 0.80, to: 0.90, color:'#f59e0b', label:'Inc'  },
+        { from: 0.90, to: 1.20, color:'#ef4444', label:'High' }
+      ];
 
-  // 2) Build the WHR gauge (BMI-style) once
-  let setWHR = null;
-  (function buildGauge(){
-    const MIN = 0.60, MAX = 1.20;
-    const SEGMENTS = [
-      { from: 0.60, to: 0.80, color:'#22c55e', label:'Std'  },
-      { from: 0.80, to: 0.90, color:'#f59e0b', label:'Inc'  },
-      { from: 0.90, to: 1.20, color:'#ef4444', label:'High' }
-    ];
+      const W=420, H=260, CX=210, CY=210, R=170;
+      const NS='http://www.w3.org/2000/svg';
+      const svg=document.createElementNS(NS,'svg');
+      svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+      dialWrap.appendChild(svg);
 
-    const W=420, H=260, CX=210, CY=210, R=170;
-    const NS='http://www.w3.org/2000/svg';
-    const svg=document.createElementNS(NS,'svg');
-    svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-    dialWrap.appendChild(svg);
+      const toXY=(deg, r=R)=>{ const rad=(deg-90)*Math.PI/180; return [CX+r*Math.cos(rad), CY+r*Math.sin(rad)]; };
+      const arc=(a1,a2,r=R)=>{ const [sx,sy]=toXY(a1,r), [ex,ey]=toXY(a2,r); const big=a2-a1>180?1:0; return `M ${sx} ${sy} A ${r} ${r} 0 ${big} 1 ${ex} ${ey}`; };
+      const angle=(v)=>{ const c=Math.max(MIN,Math.min(MAX,v)); const t=(c-MIN)/(MAX-MIN); return -90 + t*180; };
 
-    const toXY=(deg, r=R)=>{ const rad=(deg-90)*Math.PI/180; return [CX+r*Math.cos(rad), CY+r*Math.sin(rad)]; };
-    const arc=(a1,a2,r=R)=>{ const [sx,sy]=toXY(a1,r), [ex,ey]=toXY(a2,r); const big=a2-a1>180?1:0; return `M ${sx} ${sy} A ${r} ${r} 0 ${big} 1 ${ex} ${ey}`; };
-    const angle=(v)=>{ const c=Math.max(MIN,Math.min(MAX,v)); const t=(c-MIN)/(MAX-MIN); return -90 + t*180; };
+      // Bands
+      SEGMENTS.forEach(s=>{
+        const p=document.createElementNS(NS,'path');
+        p.setAttribute('d', arc(angle(s.from), angle(Math.min(s.to,MAX)), R));
+        p.setAttribute('fill','none'); p.setAttribute('stroke',s.color);
+        p.setAttribute('stroke-width','18'); p.setAttribute('stroke-linecap','round');
+        svg.appendChild(p);
+      });
 
-    // Bands
-    SEGMENTS.forEach(s=>{
-      const p=document.createElementNS(NS,'path');
-      p.setAttribute('d', arc(angle(s.from), angle(Math.min(s.to,MAX)), R));
-      p.setAttribute('fill','none'); p.setAttribute('stroke',s.color);
-      p.setAttribute('stroke-width','18'); p.setAttribute('stroke-linecap','round');
-      svg.appendChild(p);
+      // Track
+      const track=document.createElementNS(NS,'path');
+      track.setAttribute('d', arc(-90,90,R+14));
+      track.setAttribute('fill','none'); track.setAttribute('stroke','#e5e7eb'); track.setAttribute('stroke-width','2');
+      svg.appendChild(track);
+
+      // Ticks (every 0.1)
+      for (let v=MIN; v<=MAX+1e-9; v=+(v+0.1).toFixed(2)) {
+        const a=angle(v);
+        const [x1,y1]=toXY(a,R-6), [x2,y2]=toXY(a,R+8);
+        const tick=document.createElementNS(NS,'line');
+        tick.setAttribute('x1',x1); tick.setAttribute('y1',y1);
+        tick.setAttribute('x2',x2); tick.setAttribute('y2',y2);
+        tick.setAttribute('stroke','#94a3b8'); tick.setAttribute('stroke-width','2');
+        svg.appendChild(tick);
+
+        const [tx,ty]=toXY(a,R+26);
+        const txt=document.createElementNS(NS,'text');
+        txt.setAttribute('x',tx); txt.setAttribute('y',ty);
+        txt.setAttribute('text-anchor','middle'); txt.setAttribute('dominant-baseline','middle');
+        txt.setAttribute('class','tick'); txt.textContent=v.toFixed(1);
+        svg.appendChild(txt);
+      }
+
+      // Labels
+      SEGMENTS.forEach(s=>{
+        const mid=(s.from+Math.min(s.to,MAX))/2, a=angle(mid);
+        const [lx,ly]=toXY(a,R-36);
+        const t=document.createElementNS(NS,'text');
+        t.setAttribute('x',lx); t.setAttribute('y',ly);
+        t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','middle');
+        t.setAttribute('class','label'); t.setAttribute('fill','#334155'); t.textContent=s.label;
+        svg.appendChild(t);
+      });
+
+      // Needle
+      const needle=document.createElementNS(NS,'g'); needle.setAttribute('class','needle');
+      const shaft=document.createElementNS(NS,'path'); shaft.setAttribute('d',`M ${CX} ${CY} L ${CX} ${CY-R+24}`);
+      shaft.setAttribute('stroke','#0f172a'); shaft.setAttribute('stroke-width','4'); shaft.setAttribute('stroke-linecap','round');
+      needle.appendChild(shaft);
+      const hub=document.createElementNS(NS,'circle'); hub.setAttribute('cx',CX); hub.setAttribute('cy',CY); hub.setAttribute('r',7); hub.setAttribute('class','hub');
+      needle.appendChild(hub);
+      svg.appendChild(needle);
+
+      // Readout
+      const read=document.createElementNS(NS,'text');
+      read.setAttribute('x',CX); read.setAttribute('y',CY-24);
+      read.setAttribute('text-anchor','middle'); read.setAttribute('class','readout');
+      read.textContent='WHR —'; svg.appendChild(read);
+
+      // Updater with a small overshoot
+      setWHR = function(val){
+        const clamped=Math.max(0.60,Math.min(1.20,val));
+        const tgt=angle(clamped);
+        const cur=parseFloat((needle._angle ?? -90));
+        const over = tgt + Math.sign(tgt-cur)*6;
+
+        needle.style.transitionDuration='450ms';
+        needle.style.transform=`rotate(${over}deg)`; needle._angle = over;
+        setTimeout(()=>{
+          needle.style.transitionDuration='600ms';
+          needle.style.transform=`rotate(${tgt}deg)`; needle._angle = tgt;
+        },460);
+
+        read.textContent=`WHR ${clamped.toFixed(2)}`;
+        dialWrap.setAttribute('aria-label',`WHR ${clamped.toFixed(2)} on dial from ${MIN} to ${MAX}`);
+      };
+
+      needle.style.transform='rotate(-90deg)';
+    })();
+
+    // Wire calc/reset to dial visibility
+    calcBtn.addEventListener('click', () => {
+      const waist = parseFloat(document.getElementById('waist')?.value || '');
+      const hip   = parseFloat(document.getElementById('hip')?.value   || '');
+      if (!isFinite(waist) || !isFinite(hip) || waist<=0 || hip<=0) {
+        dialWrap.style.display='none';
+        resetBtn.style.display='none';
+        return;
+      }
+      const ratio = waist / hip;
+      if (dialWrap.style.display!=='block') dialWrap.style.display='block';
+      resetBtn.style.display='inline-block';
+      if (typeof setWHR === 'function') setWHR(ratio);
     });
 
-    // Track
-    const track=document.createElementNS(NS,'path');
-    track.setAttribute('d', arc(-90,90,R+14));
-    track.setAttribute('fill','none'); track.setAttribute('stroke','#e5e7eb'); track.setAttribute('stroke-width','2');
-    svg.appendChild(track);
-
-    // Ticks (every 0.1)
-    for (let v=MIN; v<=MAX+1e-9; v=+(v+0.1).toFixed(2)) {
-      const a=angle(v);
-      const [x1,y1]=toXY(a,R-6), [x2,y2]=toXY(a,R+8);
-      const tick=document.createElementNS(NS,'line');
-      tick.setAttribute('x1',x1); tick.setAttribute('y1',y1);
-      tick.setAttribute('x2',x2); tick.setAttribute('y2',y2);
-      tick.setAttribute('stroke','#94a3b8'); tick.setAttribute('stroke-width','2');
-      svg.appendChild(tick);
-
-      const [tx,ty]=toXY(a,R+26);
-      const txt=document.createElementNS(NS,'text');
-      txt.setAttribute('x',tx); txt.setAttribute('y',ty);
-      txt.setAttribute('text-anchor','middle'); txt.setAttribute('dominant-baseline','middle');
-      txt.setAttribute('class','tick'); txt.textContent=v.toFixed(1);
-      svg.appendChild(txt);
-    }
-
-    // Labels
-    SEGMENTS.forEach(s=>{
-      const mid=(s.from+Math.min(s.to,MAX))/2, a=angle(mid);
-      const [lx,ly]=toXY(a,R-36);
-      const t=document.createElementNS(NS,'text');
-      t.setAttribute('x',lx); t.setAttribute('y',ly);
-      t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','middle');
-      t.setAttribute('class','label'); t.setAttribute('fill','#334155'); t.textContent=s.label;
-      svg.appendChild(t);
-    });
-
-    // Needle
-    const needle=document.createElementNS(NS,'g'); needle.setAttribute('class','needle');
-    const shaft=document.createElementNS(NS,'path'); shaft.setAttribute('d',`M ${CX} ${CY} L ${CX} ${CY-R+24}`);
-    shaft.setAttribute('stroke','#0f172a'); shaft.setAttribute('stroke-width','4'); shaft.setAttribute('stroke-linecap','round');
-    needle.appendChild(shaft);
-    const hub=document.createElementNS(NS,'circle'); hub.setAttribute('cx',CX); hub.setAttribute('cy',CY); hub.setAttribute('r',7); hub.setAttribute('class','hub');
-    needle.appendChild(hub);
-    svg.appendChild(needle);
-
-    // Readout
-    const read=document.createElementNS(NS,'text');
-    read.setAttribute('x',CX); read.setAttribute('y',CY-24);
-    read.setAttribute('text-anchor','middle'); read.setAttribute('class','readout');
-    read.textContent='WHR —'; svg.appendChild(read);
-
-    // Updater with a small overshoot
-    setWHR = function(val){
-      const clamped=Math.max(MIN,Math.min(MAX,val));
-      const tgt=angle(clamped);
-      const cur=parseFloat((needle._angle ?? -90));
-      const over = tgt + Math.sign(tgt-cur)*6;
-
-      needle.style.transitionDuration='450ms';
-      needle.style.transform=`rotate(${over}deg)`; needle._angle = over;
-      setTimeout(()=>{
-        needle.style.transitionDuration='600ms';
-        needle.style.transform=`rotate(${tgt}deg)`; needle._angle = tgt;
-      },460);
-
-      read.textContent=`WHR ${clamped.toFixed(2)}`;
-      dialWrap.setAttribute('aria-label',`WHR ${clamped.toFixed(2)} on dial from ${MIN} to ${MAX}`);
-    };
-
-    needle.style.transform='rotate(-90deg)';
-  })();
-
-  // 3) Wire up: show dial + animate needle on Calculate
-  calcBtn.addEventListener('click', () => {
-    const waist = parseFloat(document.getElementById('waist')?.value || '');
-    const hip   = parseFloat(document.getElementById('hip')?.value   || '');
-    if (!isFinite(waist) || !isFinite(hip) || waist<=0 || hip<=0) {
+    resetBtn.addEventListener('click', () => {
+      ['waist','hip'].forEach(id => { const el=document.getElementById(id); if (el) el.value=''; });
+      const whrVal    = document.getElementById('whrVal');
+      const whrMsg    = document.getElementById('whrMsg');
+      const whrTarget = document.getElementById('whrTarget');
+      if (whrVal)    whrVal.style.display='none';
+      if (whrTarget) whrTarget.style.display='none';
+      if (whrMsg)    whrMsg.textContent='';
       dialWrap.style.display='none';
       resetBtn.style.display='none';
-      return;
-    }
-    const ratio = waist / hip;
-    if (dialWrap.style.display!=='block') dialWrap.style.display='block';
-    resetBtn.style.display='inline-block';
-    if (typeof setWHR === 'function') setWHR(ratio);
-  });
-
-  // 4) Reset: clear inputs + hide dial and pill
-  resetBtn.addEventListener('click', () => {
-    ['waist','hip'].forEach(id => { const el=document.getElementById(id); if (el) el.value=''; });
-    const whrVal    = document.getElementById('whrVal');
-    const whrMsg    = document.getElementById('whrMsg');
-    const whrTarget = document.getElementById('whrTarget');
-    if (whrVal)    whrVal.style.display='none';
-    if (whrTarget) whrTarget.style.display='none';
-    if (whrMsg)    whrMsg.textContent='';
-    dialWrap.style.display='none';
-    resetBtn.style.display='none';
-    // (Your main page "Reset" button still controls the form/plan)
-  });
-
+    });
+  }
 })();
 </script>
-
 </body>
 </html>
