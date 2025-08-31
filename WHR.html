@@ -23,39 +23,19 @@
   img{max-width:100%;height:auto;display:block}
   .wrap{max-width:1140px;margin:0 auto;padding:0 20px}
 
-  /* NAV (fixed 60px, brand rules per spec) */
-  .nav{
-    position:sticky; top:0; background:#fff; border-bottom:1px solid var(--line);
-    z-index:90; height:60px;
-  }
-  .nav-inner{
-    height:100%; display:flex; align-items:center; justify-content:space-between; gap:12px;
-  }
-  .brand-logo{
-    position:relative; height:100%; width:15%; display:block; min-width:120px;
-  }
-  .brand-logo img{
-    position:absolute; left:0; right:0; top:50%;
-    transform:translateY(-50%);
-    height:60px; width:auto; margin:0 auto; /* fills bar, no overflow */
-  }
+ /* =================== NAV =================== */
+    .nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:90;height:60px}
+    .nav-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
 
-  .tabs{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  .tabs a, .dropbtn{
-    padding:8px 10px; border-radius:10px; color:var(--muted); font-weight:700; line-height:1; outline:none;
-  }
-  .tabs a:hover, .dropbtn:hover{background:#f8fafc;color:#0b1324}
-  .tabs a:focus-visible, .dropbtn:focus-visible{outline:2px solid #93c5fd; outline-offset:2px}
-  .tabs a.active{background:#eef2ff;color:#0b1324}
+    /* BIG LOGO w/o changing navbar height */
+    .brand-logo{position:relative;height:100%;width:15%}
+    .brand-logo img{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:60px;width:auto;display:block;margin:0}
 
-  .cta{display:flex;gap:10px;align-items:center}
-  .btn{padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
-  .btn.primary{
-    /* fixed: valid gradient with two stops */
-    background:linear-gradient(90deg,var(--ink));
-    color:#fff;border:0;
-  }
-  .btn:focus-visible{outline:2px solid #93c5fd; outline-offset:2px}
+    /* Tabs / links */
+    .tabs{display:none;gap:12px;align-items:center;flex-wrap:wrap}
+    .tabs a{padding:8px 10px;border-radius:10px;color:var(--muted);font-weight:700;line-height:1}
+    .tabs a:hover{background:#f8fafc;color:#0b1324}
+    .tabs a.active{background:#eef2ff;color:#0b1324}
 
   /* Dropdown */
   .dropdown{position:relative;display:inline-block}
