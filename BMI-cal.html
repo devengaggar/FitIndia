@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>FitIndia.pro — BMI Calculator</title>
+  <meta name="description" content="BMI calculator and 30-day challenge by FitIndia.pro: personal diet plans, weekly goals, and sustainable Indian health guidance."/>
+  <meta name="theme-color" content="#046a38" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="img/Fit-India-Logo.png" type="image/png" />
+  <style>
+    :root{
+      --white:#ffffff; --offwhite:#e2e2e2;
+      --ink:#0f172a; --muted:#475569; --line:#e5e7eb; 
+      --green:#046a38; --orange:#ff671f; --yellow:#fde047;
+      --navy:#000080;--blue:#6991ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:#fff;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;height:auto}
+    .wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+
+    /* =================== NAV =================== */
+    .nav{
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      z-index: 90;
+      height: 60px;              /* fixed bar height (unchanged) */
+    }
+    .nav-inner{
+      height: 100%;
+      display: flex;
+      align-items: center;       /* vertical centering for all children */
+      justify-content: space-between;
+      gap: 12px;
+      /* no vertical padding so bar stays 60px */
+    }
+
+    /* ---- BIG LOGO without changing navbar height ---- */
+    .brand-logo{
+      position: relative;
+      height: 100%;              /* matches 60px bar */
+      width: 15%;              /* reserves layout space so tabs don't collide; tweak as needed */
+      display: block;
+      /* Optional: if you don't want the logo to overlap tabs when narrowed, reduce width */
+    }
+    .brand-logo img{
+      position: absolute;
+      left: 0; right: 0;         /* horizontally center via translateX below */
+      top: 50%;
+      transform: translateY(-50%); /* perfect vertical center */
+      height: 60px;              /* 👈 bigger than navbar (increase/decrease as desired) */
+      width: auto;
+      display: block;            /* avoid baseline issues */
+      margin: 0;            /* horizontal centering when left/right set */
+      pointer-events: auto;
+    }
+
+    /* NAV links */
+/* Dropdown container */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown trigger (looks like other nav links) */
+.dropbtn {
+  display: inline-block;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: var(--muted);
+  font-weight: 700;
+  text-decoration: none;   /* behave like <a> */
+}
+
+/* Hover matches other links */
+.dropbtn:hover {
+  background: #f8fafc;
+  color: #0b1324;
+}
+
+/* Dropdown content */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  min-width: 140px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  z-index: 999;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 8px 12px;
+  color: var(--muted);
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.dropdown-content a:hover {
+  background: #f8fafc;
+  color: #0b1324;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+    .tabs{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .tabs a{padding:8px 10px;border-radius:10px;color:var(--muted);font-weight:700;line-height:1}
+    .tabs a:hover{background:#f8fafc;color:#0b1324}
+    .tabs a.active{background:#eef2ff;color:#0b1324}
+
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer;}
+    .btn.primary{background:linear-gradient(90deg,var(--ink));color:#ffffff;border:0}
+
+    /* TIP FADER (kept for future use) */
+    .tips{border-bottom:1px solid var(--line);background:#fffef0}
+    .tips-inner{min-height:44px;display:flex;align-items:center}
+    .tip{opacity:0;transform:translateY(6px);transition:opacity .6s ease,transform .6s ease;font-weight:800;color:#3f2d00;display:inline-flex;gap:8px;align-items:center;background:#fff6b0;border:1px dashed #eab308;padding:6px 10px;border-radius:999px}
+    .tip.show{opacity:1;transform:translateY(0)}
+
+    /* HERO */
+    .hero{background:linear-gradient(180deg,#fff,var(--blue) 100%)}
+    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;height:250px;padding:36px 0}
+    @media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+    h1{font-size:clamp(1.7rem,3.6vw,2.6rem);margin:0 0 10px}
+    .sub{color:#0b1324b0}
+    .hero-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
+		
+    /* SECTIONS */
+    section{padding:40px 0;border-bottom:1px solid var(--line)}
+    .section-title{font-size:clamp(1.2rem,2.3vw,1.7rem);margin:0 0 12px;display:flex;align-items:center;gap:10px}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 6px rgba(253,224,71,.35)}
+    .muted{color:var(--muted)}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    @media(max-width:900px){.grid3{grid-template-columns:1fr}}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+    .card img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:10px;background:#f1f5f9}
+
+/* === BMI Dial (speedometer) === */
+.gauge { width: 100%; max-width: 420px; margin: 10px 0; }
+.gauge svg { display:block; width:100%; height:auto; }
+.gauge .tick { font: 600 10px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif; fill:#475569 }
+.gauge .label { font: 700 12px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif; fill:#0f172a }
+.gauge .readout { font: 800 18px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial, sans-serif; fill:#0f172a }
+.gauge .needle { transition: transform 0.9s cubic-bezier(.22,1,.36,1); transform-origin: 210px 210px; }
+.gauge .hub { fill:#0f172a }
+	
+  /* FOOTER */
+  footer{background:#0b1324;color:#dbeafe}
+  .foot{display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px;padding:28px 0}
+  @media(max-width:900px){.foot{grid-template-columns:1fr}}
+  .social{display:flex;gap:12px;flex-wrap:wrap}
+  .social a{display:inline-flex;align-items:center;gap:6px;background:#0a1228;border:1px solid #1e3a8a;border-radius:999px;padding:6px 10px;color:#c7d2fe}
+  .credit{border-top:1px solid #172554;padding:12px 0;color:#9db2d8}
+ /* DIALOGS */
+    dialog{border:1px solid var(--line);border-radius:16px;padding:0;max-width:560px;width:92%}
+    dialog::backdrop{background:rgba(2,6,23,.35)}
+    dialog[open]{display:block;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;box-shadow:0 20px 60px rgba(2,6,23,.25)}
+    .dlg-backdrop{position:fixed;inset:0;background:rgba(2,6,23,.35);z-index:9998}
+    .dlg-hd{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+    .dlg-bd{padding:16px}
+    textarea{min-height:80px}
+    .tabbar{display:flex;gap:6px;margin-bottom:10px}
+    .tabbar button{flex:1}
+ .field label{display:block;font-weight:700;margin:0 0 6px}
+    .field input,.field select,.field textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#fff;color:inherit}
+
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:900px){.row{grid-template-columns:1fr}}
+  .hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f8fafc;border:1px solid var(--line);font-weight:700;color:var(--muted)}
+  /* status variants that fit your palette */
+  .pill.ok{background:#dcfce7;border-color:#bbf7d0}
+  .pill.warn{background:#fff6b0;border:1px dashed #eab308;color:#3f2d00}
+  .pill.risk{background:#fee2e2;border-color:#fecaca}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav-inner">
+      <!-- NOTE: Use a relative path in production; file:// only for local testing -->
+      <a href="index.html" class="brand-logo" aria-label="FitIndia Home">
+        <img
+          src="img/Fit-India-Logo.png"
+          alt="FitIndia.pro logo">
+      </a>
+
+    <div class="tabs" role="navigation" aria-label="Primary links">
+  <a id="homeTop" href="index.html" target="_self">Home</a>
+  <a id="servicesTop" href="services.html" target="_self">Services</a>
+   <a id="AnnouncementsTop" href="Announcements.html" target="_self">Announcements</a>
+
+  <!-- TOOLS DROPDOWN -->
+ <div class="dropdown">
+  <a href="#" class="dropbtn">Tools ▾</a>
+  <div class="dropdown-content">
+    <a id="navBMI" href="Bmi-cal.html" target="_self">BMI</a>
+    <a id="navWHR" href="WHR.html" target="_self">WHR</a>
+  </div>
+</div>
+
+
+  <a id="aboutTop" href="about-us.html" target="_self">About Us</a>
+</div>
+
+    
+  </div>
+</nav>
+
+  <!-- ===== End Navbar ===== -->
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>BMI Calculator</h1>
+        <p class="muted">Everything you need to build sustainable health — no fads, just fundamentals tailored to Indian lifestyles.</p>
+        
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 8px">At a glance</h3>
+        <ul style="margin:0 0 8px 18px;line-height:1.65">
+          <li>Personal diet plans (veg/vegan/eggetarian/non-veg)</li>
+          <li>30-day challenges with weekly goals</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- BMI CALCULATOR -->
+    <section class="card" id="calcCard">
+      <h2>1) BMI Calculator</h2>
+      <div class="row">
+        <div class="field">
+          <label for="height">Height (cm)</label>
+          <input id="height" type="number" min="50" max="260" step="0.1" placeholder="170" />
+        </div>
+        <div class="field">
+          <label for="weight">Weight (kg)</label>
+          <input id="weight" type="number" min="10" max="400" step="0.1" placeholder="65" />
+        </div>
+      </div>
+      <div class="hero-cta">
+        <button class="btn primary" id="calcBMI">Calculate BMI</button>
+	<button class="btn primary" id="resetBMI" style="display:none">Reset</button></div>
+        <div id="bmiDial" class="gauge" aria-live="polite" style="display:none"></div>
+      <p id="bmiMsg" class="muted" style="margin:.6rem 0 0"></p>
+      <p id="bmiRange" class="pill" style="display:none;margin-top:8px"></p>
+    </section>
+
+    <!-- QUESTIONNAIRE -->
+    <section class="card" id="formCard" style="display:none">
+      <h2>2) Quick Questionnaire</h2>
+      <div class="row">
+        <div class="field"><label>Name<input id="name" type="text" placeholder="Your full name"></label></div>
+        <div class="field"><label>Age (years)<input id="age" type="number" min="12" max="100" placeholder="28"></label></div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Diet type</label>
+          <select id="dietType">
+            <option>Vegetarian</option>
+            <option>Vegan</option>
+            <option>Eggetarian</option>
+            <option>Non-veg</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Dietary restrictions (optional)</label>
+          <input id="restrictions" type="text" placeholder="e.g., no peanuts, low lactose, Jain, etc." />
+        </div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Weight you want to reduce (kg)<input id="goalKg" type="number" min="0" max="200" step="0.1" placeholder="5"></label></div>
+        <div class="field"><label>Timeframe (weeks)<input id="goalWeeks" type="number" min="2" max="52" step="1" placeholder="8"></label></div>
+      </div>
+      <div class="hero-cta">
+        <button class="btn primary" id="buildPlan" disabled>Generate 30-Day Challenge</button>
+        <button class="btn" id="resetAll">Reset</button>
+      </div>
+      <p id="goalNote" class="muted" style="margin:.5rem 0 0"></p>
+    </section>
+
+    <!-- PLAN OUTPUT -->
+    <section class="card" id="planCard" style="display:none">
+      <h2>3) Your 30-Day Challenge</h2>
+      <div id="advice" class="pill ok" style="margin-bottom:10px"></div>
+      <div id="range" class="pill" style="margin-bottom:10px"></div>
+
+      <h3 style="margin:8px 0">Weekly Goals</h3>
+      <ul id="weeklyGoals" class="muted" style="line-height:1.6"></ul>
+
+      <h3 style="margin:12px 0 6px">Day-wise Plan</h3>
+      <div id="daywise"></div>
+
+      <div class="hero-cta" style="margin-top:12px">
+        <button class="btn" id="download">Download Plan (TXT)</button>
+      </div>
+
+      <p class="muted" style="margin-top:10px">Note: This is general guidance and not a substitute for medical advice. Consult a clinician for personalized care.</p>
+    </section>
+  </main>
+<!-- FOOTER with socials -->
+  <footer>
+    <div class="wrap foot">
+      <div>
+        <h3 style="margin:0 0 8px">FitIndia.pro</h3>
+        <p>Your partner in evidence‑based weight care.</p>
+      </div>
+      <div>
+        <h4>Pages</h4>
+        <ul style="list-style:none;padding:0;line-height:1.9">
+  <li><a id="openAboutF" href="about-us.html" target="_self">About Us</a></li>
+  <li><a id="openServicesF" href="services.html" target="_self">Services</a></li>
+  <li><a id="AnnouncementsTop" href="Announcements.html" target="_self">Announcements</a></li>
+</ul>
+      </div>
+      <div>
+        <h4>Follow us</h4>
+        <div class="social">
+          <a href="https://instagram.com/fitindia.pro" target="_blank">📸 Instagram</a>
+          <a href="https://www.linkedin.com/company/fitindia-pro" target="_blank">💼 LinkedIn</a>
+          <a href="https://facebook.com/fitindia.pro" target="_blank">📘 Facebook</a>
+          <a href="https://wa.me/0000000000" target="_blank">💬 WhatsApp</a>
+        </div>
+      </div>
+    </div>
+    <div class="wrap credit">© <span id="year"></span> FitIndia.pro • All rights reserved.</div>
+  </footer>
+
+ <!-- AUTH DIALOG (Login + Sign Up) -->
+  
+
+
+
+<script>
+/* ===================== UTILITIES ===================== */
+const $ = (id) => document.getElementById(id);
+
+// Footer year
+(() => { const y = $("year"); if (y) y.textContent = new Date().getFullYear(); })();
+
+/* ===================== DIALOG HELPERS ===================== */
+const hasShowModal = !!document.createElement('dialog').showModal;
+
+function openDialogById(id){
+  const dlg = $(id);
+  if (!dlg) return;
+  if (hasShowModal && typeof dlg.showModal === 'function') { dlg.showModal(); return; }
+  dlg.setAttribute('open','');
+  const bg = document.createElement('div');
+  bg.className = 'dlg-backdrop'; bg.dataset.for = id;
+  document.body.appendChild(bg);
+  bg.addEventListener('click', ()=> closeDialogByEl(dlg));
+}
+
+function closeDialogByEl(dlg, value){
+  if (!dlg) return;
+  if (hasShowModal && typeof dlg.close === 'function') { dlg.close(value || ''); return; }
+  dlg.removeAttribute('open');
+  const bg = document.querySelector(`.dlg-backdrop[data-for="${dlg.id}"]`) || document.querySelector('.dlg-backdrop');
+  if (bg) bg.remove();
+  // simulate close event for fallback
+  dlg.returnValue = value || '';
+  dlg.dispatchEvent(new Event('close'));
+}
+
+// Global Esc closes any open dialog
+document.addEventListener('keydown', (e)=>{
+  if (e.key === 'Escape') {
+    const d = document.querySelector('dialog[open]');
+    if (d) closeDialogByEl(d);
+  }
+});
+
+/* ===================== SESSION HELPERS ===================== */
+function getSessionEmail(){
+  try { return (JSON.parse(localStorage.getItem('fitindia_session')||'null')||{}).email || null; } catch { return null; }
+}
+let isAuthed = false;
+let pendingBuild = false;
+
+/* ===================== AUTH UI (TABS + VALIDATION + SESSION) ===================== */
+(function authModule(){
+  const dlg          = $('authDlg');
+  if (!dlg) return;
+
+  const authTitle    = $('authTitle');
+  const tabLogin     = $('tabLogin');
+  const tabSignup    = $('tabSignup');
+  const loginPane    = $('loginPane');
+  const signupPane   = $('signupPane');
+  const linkToSignup = $('linkToSignup');
+  const linkToLogin  = $('linkToLogin');
+  const authError    = $('authError');
+
+  const loginEmail   = $('loginEmail');
+  const loginPwd     = $('loginPwd');
+  const suName       = $('suName');
+  const suEmail      = $('suEmail');
+  const suPwd        = $('suPwd');
+  const suPwd2       = $('suPwd2');
+
+  const loginSubmit  = $('loginSubmit');   // should be type="submit" value="ok"
+  const signupSubmit = $('signupSubmit');  // should be type="submit" value="ok"
+
+  // Close "×" button
+  document.querySelector('#authDlg .dlg-close')?.addEventListener('click', ()=> closeDialogByEl(dlg));
+
+  function setError(msg){ authError.textContent = msg; authError.style.display = 'inline-block'; }
+  function clearError(){ authError.style.display = 'none'; authError.textContent = ''; }
+
+  function showLogin(){
+    if (authTitle) authTitle.textContent = 'Login';
+    if (loginPane)  loginPane.style.display = 'block';
+    if (signupPane) signupPane.style.display = 'none';
+    tabLogin?.classList.add('primary');
+    tabSignup?.classList.remove('primary');
+    tabLogin?.setAttribute('aria-selected','true');
+    tabSignup?.removeAttribute('aria-selected');
+    clearError();
+  }
+  function showSignup(){
+    if (authTitle) authTitle.textContent = 'Sign Up';
+    if (loginPane)  loginPane.style.display = 'none';
+    if (signupPane) signupPane.style.display = 'block';
+    tabSignup?.classList.add('primary');
+    tabLogin?.classList.remove('primary');
+    tabSignup?.setAttribute('aria-selected','true');
+    tabLogin?.removeAttribute('aria-selected');
+    clearError();
+  }
+
+  tabLogin?.addEventListener('click', showLogin);
+  tabSignup?.addEventListener('click', showSignup);
+  linkToSignup?.addEventListener('click', (e)=>{ e.preventDefault(); showSignup(); });
+  linkToLogin?.addEventListener('click',  (e)=>{ e.preventDefault(); showLogin(); });
+
+  // Demo storage (local only)
+  const KEY = 'fitindia_users'; // [{email, name, hash}]
+  const getUsers = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } };
+  const setUsers = (list) => localStorage.setItem(KEY, JSON.stringify(list));
+  const hash = (s) => btoa(unescape(encodeURIComponent(s))); // demo only
+
+  // Prevent closing when invalid
+  loginSubmit?.addEventListener('click', (e)=>{
+    clearError();
+    const email = (loginEmail?.value||'').trim().toLowerCase();
+    const pwd   = (loginPwd?.value||'');
+    if (!email || !pwd){ e.preventDefault(); setError('Please enter email and password.'); return; }
+    const u = getUsers().find(x => x.email === email);
+    if (!u || u.hash !== hash(pwd)){ e.preventDefault(); setError('Invalid email or password.'); return; }
+    lastAuthEmail = email; // let dialog close with value="ok"
+  });
+
+  signupSubmit?.addEventListener('click', (e)=>{
+    clearError();
+    const name  = (suName?.value||'').trim();
+    const email = (suEmail?.value||'').trim().toLowerCase();
+    const pwd   = (suPwd?.value||'');
+    const pwd2  = (suPwd2?.value||'');
+    if (!name || !email || !pwd || !pwd2){ e.preventDefault(); setError('Please fill all fields.'); return; }
+    if (pwd.length < 8){ e.preventDefault(); setError('Password must be at least 8 characters.'); return; }
+    if (pwd !== pwd2){ e.preventDefault(); setError('Passwords do not match.'); return; }
+    const users = getUsers();
+    if (users.some(x => x.email === email)){ e.preventDefault(); setError('Account already exists. Try logging in.'); return; }
+    users.push({ email, name, hash:hash(pwd) }); setUsers(users);
+    lastAuthEmail = email; // let dialog close with value="ok"
+  });
+
+  // Session + redirect after successful dialog close
+  let lastAuthEmail = null;
+  dlg.addEventListener('close', ()=>{
+    if (dlg.returnValue === 'ok' && lastAuthEmail){
+      localStorage.setItem('fitindia_session', JSON.stringify({ email:lastAuthEmail, ts:Date.now() }));
+      isAuthed = true;
+
+      const btn = $('openAuth');
+      if (btn){
+        btn.textContent = 'Go to Dashboard';
+        btn.onclick = () => window.location.assign('Dashboard.html');
+      }
+
+      if (pendingBuild) { pendingBuild = false; generatePlan?.(); }
+      window.location.assign('Dashboard.html');
+    } else {
+      lastAuthEmail = null;
+    }
+    // Reset to Login tab each time
+    showLogin();
+  });
+
+  // Bind open button HERE so showLogin is in scope
+  const openBtn = $('openAuth');
+  openBtn?.addEventListener('click', ()=>{
+    showLogin();               // ensures first-open active tab styling
+    openDialogById('authDlg');
+  });
+
+  // Initial state: set tab + CTA from existing session
+  showLogin();
+  try {
+    const session = JSON.parse(localStorage.getItem('fitindia_session') || 'null');
+    if (session?.email){
+      isAuthed = true;
+      if (openBtn){
+        openBtn.textContent = 'Go to Dashboard';
+        openBtn.onclick = () => window.location.assign('Dashboard.html');
+      }
+    }
+  } catch {}
+})();
+
+/* ===================== METRICS STORAGE HELPERS ===================== */
+function METRIC_KEY(email){ return `fitindia_metrics_${email}`; }
+function loadMetrics(email){ try { return JSON.parse(localStorage.getItem(METRIC_KEY(email))||'{}'); } catch { return {}; } }
+function saveMetrics(email, obj){ const cur = loadMetrics(email); localStorage.setItem(METRIC_KEY(email), JSON.stringify({ ...cur, ...obj })); }
+
+/* ===================== BMI + PLAN (calculator-driven) ===================== */
+let lastBMI = null;
+
+$("calcBMI")?.addEventListener("click", () => {
+  const h = parseFloat($("height")?.value);
+  const w = parseFloat($("weight")?.value);
+
+  if(!isFinite(h)||!isFinite(w)||h<=0||w<=0){
+    $("bmiVal") && ($("bmiVal").style.display="none");
+    $("bmiMsg") && ( $("bmiMsg").textContent = "Please enter valid height and weight.");
+    $("buildPlan") && ( $("buildPlan").disabled = true );
+    lastBMI = null;
+    return;
+  }
+
+  const bmi = w / Math.pow(h/100, 2);
+  const v = (Math.round(bmi*10)/10).toFixed(1);
+  lastBMI = bmi;
+if (window.__fit_bmi_set) window.__fit_bmi_set(parseFloat(v));
+
+// 👇 Show Reset button
+$("resetBMI").style.display = "inline-block";
+
+// show the dial only after we have a value
+const dial = $("bmiDial");
+if (dial && dial.style.display !== "block") dial.style.display = "block";
+
+
+
+  $("bmiVal") && ( $("bmiVal").style.display = "inline-block", $("bmiVal").textContent = `BMI: ${v}` );
+
+  let cat="", msg="", cls="ok";
+  if(bmi < 18.5){ cat="Underweight"; cls="warn";
+    msg = "Structured nutrition to gain lean mass + progressive strength (2–3×/wk). Consider clinical review if recent weight loss.";
+  } else if(bmi < 25){ cat="Normal"; cls="ok";
+    msg = "Great! Maintain with balanced meals, 150–180 min/wk activity, 2–3× strength sessions, and regular sleep.";
+  } else if(bmi < 30){ cat="Overweight"; cls="warn";
+    msg = "Aim for a gentle calorie deficit, improve food quality/portions, walk daily, and add 3×/wk strength.";
+  } else { cat="Obese"; cls="risk";
+    msg = "Prefer clinician-supervised plan; gradual deficit + low-impact cardio and strength. Focus on consistency.";
+  }
+
+  $("bmiMsg") && ( $("bmiMsg").textContent = `${cat} — ${msg}` );
+  if ($("bmiRange")){
+    const m = h/100, min = 18.5*m*m, max = 24.9*m*m;
+    $("bmiRange").style.display = "inline-block";
+    $("bmiRange").textContent = `Healthy weight range for your height: ${min.toFixed(1)}–${max.toFixed(1)} kg`;
+  }
+
+  const email = getSessionEmail();
+  if (email){
+    saveMetrics(email, {
+      bmi: { value: Number(v), height_cm: h, weight_kg: w, category: cat, ts: Date.now() }
+    });
+  }
+
+  if ($("buildPlan")) $("buildPlan").disabled = false;
+  const formCard = $("formCard");
+  if (formCard && formCard.style.display === "none") {
+    formCard.style.display = "block";
+    formCard.scrollIntoView({behavior:"smooth"});
+  }
+
+  if ($("bmiVal")) $("bmiVal").className = "pill " + (cls==="ok"?"ok":cls==="warn"?"warn":"risk");
+});
+
+// Reset
+["bmiVal","bmiRange"].forEach(id=>{ $(id) && ($(id).style.display="none"); });
+const dial = $("bmiDial"); if (dial) dial.style.display = "none";
+
+$("resetAll")?.addEventListener("click", () => {
+  ["height","weight","name","age","restrictions","goalKg","goalWeeks"].forEach(id=>{ $(id) && ($(id).value=""); });
+  $("dietType") && ( $("dietType").selectedIndex = 0 );
+  ["bmiVal","bmiRange"].forEach(id=>{ $(id) && ($(id).style.display="none"); });
+  $("bmiMsg") && ( $("bmiMsg").textContent = "" );
+  $("goalNote") && ( $("goalNote").textContent = "" );
+  $("planCard") && ( $("planCard").style.display = "none" );
+  $("formCard") && ( $("formCard").style.display = "none" );
+  lastBMI = null;
+  $("buildPlan") && ( $("buildPlan").disabled = true );
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+// Reset BMI (new button that shows only after calculation)
+$("resetBMI")?.addEventListener("click", () => {
+  ["height","weight"].forEach(id=>{ $(id).value=""; });
+  $("bmiMsg").textContent = "";
+  $("bmiRange").style.display = "none";
+
+  const dial = $("bmiDial");
+  if (dial) dial.style.display = "none"; // hide dial again
+  $("resetBMI").style.display = "none"; // hide Reset button again
+});
+
+
+// Build -> login gate
+$("buildPlan")?.addEventListener("click", () => {
+  if (!lastBMI) { alert("Please calculate your BMI first."); return; }
+
+  if (isAuthed) { generatePlan(); return; }
+
+  // Fallback to stored session (e.g., after refresh)
+  try {
+    const session = JSON.parse(localStorage.getItem('fitindia_session') || 'null');
+    if (session?.email) {
+      isAuthed = true;
+      generatePlan();
+      return;
+    }
+  } catch {}
+
+  pendingBuild = true;
+  openDialogById('authDlg');
+});
+
+// Plan generator
+function generatePlan(){
+  const name = $("name")?.value?.trim() || "";
+  const age = parseInt($("age")?.value,10);
+  const dietType = $("dietType")?.value || "Vegetarian";
+  const restrictions = $("restrictions")?.value?.trim() || "";
+  const goalKg = parseFloat($("goalKg")?.value);
+  const weeks = parseInt($("goalWeeks")?.value,10);
+  const h = parseFloat($("height")?.value);
+  const w = parseFloat($("weight")?.value);
+
+  if(!isFinite(goalKg)||!isFinite(weeks)||goalKg<=0||weeks<=0){ alert("Enter a valid weight-loss goal and timeframe."); return; }
+
+  const ratePerWeek = goalKg / weeks; // kg/week
+  const kcalPerKg = 7700;
+  const dailyDeficit = Math.round((goalKg * kcalPerKg) / (weeks*7));
+  let rateNote = `Target rate: ${ratePerWeek.toFixed(2)} kg/week (≈ ${dailyDeficit} kcal/day deficit).`;
+  if(ratePerWeek > 1){ rateNote += " This is aggressive; consider a slower, safer rate (0.25–1.0 kg/week)."; }
+  $("goalNote") && ( $("goalNote").textContent = rateNote );
+
+  let cat="", note="", colorClass="ok";
+  if(lastBMI < 18.5){ cat="Underweight"; note="Focus on nutrient-dense calories, +300–450 kcal/day surplus, and 2–3×/wk strength to add lean mass."; colorClass="warn"; }
+  else if(lastBMI < 25){ cat="Normal"; note="Maintain with balanced meals, 150–180 min/wk activity (mix of cardio + strength), and weekly monitoring."; colorClass="ok"; }
+  else if(lastBMI < 30){ cat="Overweight"; note="Aim for 250–400 kcal/day deficit via portion control & food quality; 3×/wk strength + daily walks."; colorClass="warn"; }
+  else { cat="Obese"; note="Gradual deficit with clinician oversight; low-impact cardio, 2–3×/wk strength, and lifestyle coaching."; colorClass="risk"; }
+
+  if ($("advice")){
+    $("advice").textContent = `${name?name+", ":""}Your BMI category: ${cat}. ${note}`;
+    $("advice").className = `pill ${colorClass}`;
+  }
+  if ($("range")){
+    const m = h/100, min = 18.5*m*m, max = 24.9*m*m;
+    $("range").textContent = `Healthy weight range for your height: ${min.toFixed(1)}–${max.toFixed(1)} kg • ${rateNote}`;
+  }
+
+  const stepBase = lastBMI<18.5 ? 7000 : lastBMI<25 ? 8000 : lastBMI<30 ? 9000 : 10000;
+  const strengthPerWeek = lastBMI<18.5 ? 2 : lastBMI<30 ? 3 : 3;
+  const proteinTip = (dietType==="Vegan"||dietType==="Vegetarian") ?
+    "Include dal/beans, tofu/paneer*, curd/soy curd; aim 0.8–1.2 g/kg protein (*paneer if dairy ok)." :
+    "Prioritise lean protein: eggs, chicken/fish, dal/beans, curd; aim 0.8–1.2 g/kg protein.";
+
+  const weeksList = [
+    `Week 1: Plate method (½ veg, ¼ protein, ¼ carbs); ${stepBase.toLocaleString()} steps/day; 2 L water/day.`,
+    `Week 2: ${strengthPerWeek}× strength (20–30 min); ${proteinTip}`,
+    `Week 3: Reduce ultra-processed snacks; earlier dinners (2–3 h before sleep).`,
+    `Week 4: Review progress; adjust portions; plan next month.`
+  ];
+  if ($("weeklyGoals")) $("weeklyGoals").innerHTML = weeksList.map(g=>`<li>${g}</li>`).join("");
+
+  const activities = (lastBMI >= 30) ? [
+    {ex:"Low-impact cardio 30–40 min (brisk walk/cycle)", steps:`${stepBase.toLocaleString()}`, mental:"5-min breathing + gratitude note"},
+    {ex:"Strength (full body, 20–25 min)", steps:`${(stepBase-1500).toLocaleString()}`, mental:"2×3-min standing stretch breaks"},
+    {ex:"Intervals: 2 min brisk / 2 min easy ×6", steps:`${(stepBase+500).toLocaleString()}`, mental:"10-min mindfulness"},
+    {ex:"Yoga or mobility 25 min", steps:`${(stepBase-1000).toLocaleString()}`, mental:"Call a friend / positive social"},
+    {ex:"Strength (lower body 20–25 min)", steps:`${(stepBase-1200).toLocaleString()}`, mental:"Sleep wind-down (no screens 45 min)"},
+    {ex:"Long walk 45–60 min", steps:`${(stepBase+1000).toLocaleString()}`, mental:"Walk after dinner 10–15 min"},
+    {ex:"Active recovery 20–30 min", steps:`${(stepBase-2000).toLocaleString()}`, mental:"Light stretching + journaling"}
+  ] : [
+    {ex:"Brisk walk 30–40 min", steps:`${stepBase.toLocaleString()}`, mental:"5-min breathing + gratitude note"},
+    {ex:`Strength (full body ${strengthPerWeek>=3?25:20}–30 min)`, steps:`${(stepBase-1500).toLocaleString()}`, mental:"2×3-min stretch breaks"},
+    {ex:"Intervals: 2 min brisk / 2 min easy ×6", steps:`${(stepBase+500).toLocaleString()}`, mental:"10-min mindfulness"},
+    {ex:"Yoga or mobility 25 min", steps:`${(stepBase-1000).toLocaleString()}`, mental:"Call a friend / positive social"},
+    {ex:"Strength (lower body 25 min)", steps:`${(stepBase-1200).toLocaleString()}`, mental:"Sleep wind-down (no screens 45 min)"},
+    {ex:"Long walk 45–60 min", steps:`${(stepBase+1000).toLocaleString()}`, mental:"Walk after dinner 10–15 min"},
+    {ex:"Active recovery 20–30 min", steps:`${(stepBase-2000).toLocaleString()}`, mental:"Light stretching + journaling"}
+  ];
+
+  const restrictNote = restrictions ? ` • Avoid: ${restrictions}` : "";
+  const dietLine = `Diet type: ${dietType}${restrictNote}`;
+
+  const days = [];
+  for(let d=1; d<=30; d++){
+    const a = activities[(d-1)%activities.length];
+    days.push({day:d,ex:a.ex,steps:a.steps,mental:a.mental});
+  }
+
+  const daywise = $("daywise");
+  if (daywise){
+    daywise.innerHTML = "";
+    for(let wIdx=0; wIdx<4; wIdx++){
+      const start = wIdx*7, end = Math.min(start+7, 30);
+      const details = document.createElement("details");
+      details.open = wIdx===0;
+      const sum = document.createElement("summary");
+      sum.textContent = `Week ${wIdx+1} — ${dietLine}`;
+      details.appendChild(sum);
+      const ul = document.createElement("ul");
+      ul.style.lineHeight="1.6";
+      for(let i=start;i<end;i++){
+        const d = days[i];
+        const li = document.createElement("li");
+        li.textContent = `Day ${d.day}: Exercise — ${d.ex}; Steps — ${d.steps}; Mental — ${d.mental}.`;
+        ul.appendChild(li);
+      }
+      details.appendChild(ul);
+      daywise.appendChild(details);
+    }
+  }
+
+  $("planCard") && ( $("planCard").style.display = "block", $("planCard").scrollIntoView({behavior:"smooth", block:"start"}) );
+
+  $("download") && ( $("download").onclick = () => {
+    const advice = $("advice")?.textContent || "";
+    const range = $("range")?.textContent || "";
+    const weeksOut = $("weeklyGoals") ? Array.from($("weeklyGoals").querySelectorAll('li')).map(li=>`- ${li.textContent}`).join("\n") : "";
+    const dayOut = days.map(d => `- Day ${d.day}: Exercise — ${d.ex}; Steps — ${d.steps}; Mental — ${d.mental}.`).join("\n");
+    const txt =
+`FitIndia.pro — 30-Day Challenge
+Name: ${name||"-"} • Age: ${isFinite(age)?age:"-"}
+Height: ${isFinite(h)?h+" cm":"-"} • Weight: ${isFinite(w)?w+" kg":"-"}
+${dietLine}
+Goal: lose ${goalKg} kg in ${weeks} weeks
+${range}
+
+${advice}
+
+Weekly Goals:
+${weeksOut}
+
+Day-wise Plan:
+${dayOut}
+`;
+    const blob = new Blob([txt], {type:"text/plain"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "fitindia-30-day-challenge.txt"; a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+/* ===================== PERSONALIZED 30-DAY PLAN (profile-driven) ===================== */
+const FIT_PROFILE_KEY = 'fitindia_profile';
+function loadProfile(){ try { const p = JSON.parse(localStorage.getItem(FIT_PROFILE_KEY)||'null'); return p && typeof p === 'object' ? p : null; } catch { return null; } }
+function saveProfile(p){ localStorage.setItem(FIT_PROFILE_KEY, JSON.stringify(p)); }
+
+async function ensureProfile(){
+  let p = loadProfile();
+  if (p) return p;
+  const h = parseFloat(prompt('Enter height in cm (e.g., 170):', '170')||'');
+  const w = parseFloat(prompt('Enter weight in kg (e.g., 78):', '78')||'');
+  const sx = (prompt('Sex (M/F, optional):', '').trim().toUpperCase()||'');
+  const act = (prompt('Activity level (low / medium / high):', 'low').trim().toLowerCase()||'low');
+  if (!h || !w){ alert('Height and weight required to personalize your 30-day plan.'); return null; }
+  p = { height_cm: h, weight_kg: w, sex: sx, activity: ['low','medium','high'].includes(act)?act:'low', updated_at: Date.now() };
+  saveProfile(p);
+  return p;
+}
+
+function bmiFrom(h_cm, w_kg){ const m = h_cm/100; return +(w_kg/(m*m)).toFixed(1); }
+function bmiCategory(bmi){ if (bmi < 18.5) return 'underweight'; if (bmi < 23) return 'normal'; if (bmi < 27.5) return 'overweight'; return 'obese'; }
+function proteinTarget_g_per_day(weight_kg, cat){ const map = { underweight:1.2, normal:1.2, overweight:1.4, obese:1.6 }; return Math.round(weight_kg * (map[cat]||1.4)); }
+function stepTarget(cat, activity){ const base = { underweight:7000, normal:8000, overweight:9000, obese:10000 }[cat] || 8000; const tweak = { low:-500, medium:0, high:+1000 }[activity] || 0; return base + tweak; }
+function weeklyStrengthDays(cat){ return { underweight:3, normal:3, overweight:4, obese:4 }[cat] || 3; }
+function weeklyHIIT(cat){ return { underweight:0, normal:1, overweight:1, obese:2 }[cat] || 1; }
+function waterTarget_ml(weight_kg){ return 30 * weight_kg; }
+function seededRng(seedStr){ let h = 2166136261 >>> 0; for (let i=0;i<seedStr.length;i++){ h ^= seedStr.charCodeAt(i); h = Math.imul(h, 16777619); } return function(){ h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return (h >>> 0) / 4294967295; }; }
+function pick(rng, arr){ return arr[Math.floor(rng()*arr.length)]; }
+
+const HABITS = [
+  'No sugary drinks today','Add 1 fruit & 1 salad','Stop eating 2 hrs before bed',
+  'Mindful eating for 10 min','No snacks after 8 pm','2 cups green tea spread out',
+  'Protein first in every meal'
+];
+const WORKOUTS = {
+  strengthPush:['Push-ups / Incline push-ups','Shoulder taps','Wall push-press (light DB/water bottles)'],
+  strengthPull:['Rows (band/bottles)','Supermans','Biceps curls (bottles)'],
+  strengthLegs:['Squats or chair squats','Lunges or split squats','Glute bridge'],
+  cardioEasy:['Brisk walk','Cycling easy','Elliptical easy','Light jogging'],
+  HIIT:['20s fast / 40s easy × 10 (walk/jog)','30s high knees / 30s march × 8','Stair HIIT 15 min (easy breaks)'],
+  mobility:['Hip openers 5 min','Thoracic rotations','Hamstring + calf stretch','Ankle mobility']
+};
+const NUTRITION_CUES = [
+  'Swap refined carbs for millets/roti (2 instead of 3).',
+  'Add a dal/curd/eggs for protein in lunch.',
+  'Keep plate: ½ veggies, ¼ protein, ¼ carbs.',
+  'Carry a 1L bottle; finish twice by 6pm.',
+  'Limit sweets to 2 bites; enjoy slowly.',
+  'Track oil: max 2–3 tsp/day personally.',
+  'Order smart: tandoori/grilled over fried.'
+];
+
+function buildPlan(email, profile){
+  const { height_cm, weight_kg, activity } = profile;
+  const bmi = bmiFrom(height_cm, weight_kg);
+  const cat = bmiCategory(bmi);
+  const rng = seededRng(email ? (email + '|' + bmi) : (String(bmi) + '|guest'));
+
+  const steps = stepTarget(cat, activity);
+  const strengthDays = weeklyStrengthDays(cat);
+  const hiitDays = weeklyHIIT(cat);
+  const protein = proteinTarget_g_per_day(weight_kg, cat);
+  const water = waterTarget_ml(weight_kg);
+
+  const advice = (()=> {
+    const a = [];
+    if (cat==='underweight') a.push('Focus on strength & adequate calories; avoid aggressive deficits.');
+    if (cat==='normal') a.push('Recomposition focus: protein + strength; modest calorie control.');
+    if (cat==='overweight') a.push('Gentle deficit, consistent steps, progressive strength.');
+    if (cat==='obese') a.push('Prioritize joint-friendly cardio, protein, and gradual habit stacking.');
+    return a.join(' ');
+  })();
+
+  const weeklyGoals = [
+    `Average steps ≥ ${steps.toLocaleString()} / day`,
+    `${strengthDays}× strength sessions / week`,
+    `${hiitDays}× HIIT or tempo (if joint-friendly)`,
+    `Protein ≈ ${protein} g/day`,
+    `Water ≈ ${(water/1000).toFixed(1)} L/day`,
+    `Sleep 7–8 h, screens off 60 min before bed`,
+  ];
+
+  const days = [];
+  const splits = ['Push','Pull','Legs'];
+  for (let d=1; d<=30; d++){
+    const weekday = (d-1) % 7;
+    let focus, workout;
+    const includeStrength = [1,3,5,0].slice(0, strengthDays).includes(weekday);
+    const includeHIIT = [2,6].slice(0, hiitDays).includes(weekday);
+
+    if (includeStrength){
+      const split = splits[d % splits.length];
+      workout = split==='Push' ? WORKOUTS.strengthPush : split==='Pull' ? WORKOUTS.strengthPull : WORKOUTS.strengthLegs;
+      focus = `Strength – ${split}`;
+    } else if (includeHIIT){
+      workout = WORKOUTS.HIIT; focus = 'Cardio – HIIT (low-impact if needed)';
+    } else {
+      workout = WORKOUTS.cardioEasy; focus = 'Cardio – Easy/Zone 2';
+    }
+
+    const habit = pick(rng, HABITS);
+    const nutri = pick(rng, NUTRITION_CUES);
+    const mins = (includeHIIT ? 18 : includeStrength ? 28 : 35) + ({ underweight:0, normal:5, overweight:10, obese:8 }[cat]||0);
+
+    days.push({ day:d, steps, focus, workout, minutes:mins, habit, nutrition:nutri });
+  }
+
+  return {
+    bmi, cat, steps, protein, water, advice, weeklyGoals, days,
+    rangeLabel: `BMI ${bmi} (${cat}), Protein ~${protein} g/day, Water ~${(water/1000).toFixed(1)} L/day`
+  };
+}
+
+function renderPlan(plan){
+  const planSec = document.getElementById('plan');
+  if (!planSec) return;
+
+  const adviceEl = document.getElementById('advice');
+  const rangeEl  = document.getElementById('range');
+  const goalsEl  = document.getElementById('weeklyGoals');
+  const daywise  = document.getElementById('daywise');
+
+  if (adviceEl) adviceEl.textContent = plan.advice;
+  if (rangeEl)  rangeEl.textContent  = plan.rangeLabel;
+
+  if (goalsEl){
+    goalsEl.innerHTML = '';
+    plan.weeklyGoals.forEach(g=>{
+      const li = document.createElement('li');
+      li.textContent = g;
+      goalsEl.appendChild(li);
+    });
+  }
+
+  if (daywise){
+    daywise.innerHTML = '';
+    plan.days.forEach(d=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.marginBottom = '10px';
+      card.innerHTML = `
+        <h4 style="margin:0 0 6px">Day ${d.day} • <span class="pill">${d.focus}</span></h4>
+        <p class="muted" style="margin:0 0 6px">Target: ~${d.steps.toLocaleString()} steps • ${d.minutes} min</p>
+        <ul style="margin:0 0 6px 18px;line-height:1.5">${d.workout.map(x=>`<li>${x}</li>`).join('')}</ul>
+        <p style="margin:0 0 4px"><strong>Habit:</strong> ${d.habit}</p>
+        <p style="margin:0"><strong>Nutrition:</strong> ${d.nutrition}</p>
+      `;
+      daywise.appendChild(card);
+    });
+  }
+
+  planSec.style.display = 'block';
+
+  const btn = document.getElementById('download');
+  if (btn){
+    btn.onclick = () => {
+      const lines = [];
+      lines.push(`Your 30-Day Plan`);
+      lines.push(plan.rangeLabel);
+      lines.push('');
+      lines.push('Weekly Goals:');
+      plan.weeklyGoals.forEach(g=>lines.push('• ' + g));
+      lines.push('');
+      plan.days.forEach(d=>{
+        lines.push(`Day ${d.day} — ${d.focus}`);
+        lines.push(`  Steps: ~${d.steps}`);
+        lines.push(`  Duration: ${d.minutes} min`);
+        lines.push('  Workout: ' + d.workout.join(', '));
+        lines.push('  Habit: ' + d.habit);
+        lines.push('  Nutrition: ' + d.nutrition);
+        lines.push('');
+      });
+      const blob = new Blob([lines.join('\n')], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'FitIndia_30day_plan.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+  }
+}
+
+/* ===================== BOOT PERSONALIZED PLAN AFTER LOGIN ===================== */
+(async function bootPersonalPlan(){
+  const email = getSessionEmail();
+  if (!email) return; // not logged in
+
+  const profile = await ensureProfile();
+  if (!profile) return;
+
+  const plan = buildPlan(email, profile);
+  renderPlan(plan);
+})();
+
+/* ===================== BMI SPEEDOMETER DIAL ===================== */
+(function(){
+  const MIN = 10, MAX = 40; // dial range (BMI outside is clamped)
+  const SEGMENTS = [
+    { from: 10, to: 18.5, color:'#f59e0b', label:'Under' }, // amber
+    { from: 18.5, to: 23,  color:'#22c55e', label:'Normal' }, // green (Asian cutoffs)
+    { from: 23,  to: 27.5, color:'#f97316', label:'Over' },  // orange
+    { from: 27.5,to: 40,  color:'#ef4444', label:'Obese' }   // red
+  ];
+
+  const dialRoot = document.getElementById('bmiDial');
+  if (!dialRoot) return;
+
+  // Build SVG once
+  const W=420, H=260, CX=210, CY=210, R=170; // semicircle centered at bottom
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  dialRoot.appendChild(svg);
+
+  // Helpers
+  const toXY = (deg, r=R) => {
+    const rad = (deg-90) * Math.PI/180;
+    return [CX + r*Math.cos(rad), CY + r*Math.sin(rad)];
+  };
+  const arcPath = (startDeg, endDeg, r=R) => {
+    const [sx, sy] = toXY(startDeg, r);
+    const [ex, ey] = toXY(endDeg, r);
+    const largeArc = endDeg - startDeg > 180 ? 1 : 0;
+    return `M ${sx} ${sy} A ${r} ${r} 0 ${largeArc} 1 ${ex} ${ey}`;
+  };
+  const angleFor = (val) => {
+    const v = Math.max(MIN, Math.min(MAX, val));
+    const t = (v - MIN) / (MAX - MIN);
+    return -90 + t*180; // -90 (left) to +90 (right)
+  };
+
+  // Segment arcs
+  SEGMENTS.forEach(seg=>{
+    const start = angleFor(seg.from);
+    const end   = angleFor(Math.min(seg.to, MAX));
+    const path = document.createElementNS(svgNS,'path');
+    path.setAttribute('d', arcPath(start, end, R));
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke', seg.color);
+    path.setAttribute('stroke-width','18');
+    path.setAttribute('stroke-linecap','round');
+    svg.appendChild(path);
+  });
+
+  // Outer thin arc (track)
+  const track = document.createElementNS(svgNS,'path');
+  track.setAttribute('d', arcPath(-90, 90, R+14));
+  track.setAttribute('fill','none');
+  track.setAttribute('stroke','#e5e7eb');
+  track.setAttribute('stroke-width','2');
+  svg.appendChild(track);
+
+  // Ticks & numbers (every 5 BMI)
+  for (let v = MIN; v <= MAX; v += 5){
+    const a = angleFor(v);
+    const [x1,y1] = toXY(a, R-6);
+    const [x2,y2] = toXY(a, R+8);
+    const tick = document.createElementNS(svgNS,'line');
+    tick.setAttribute('x1',x1); tick.setAttribute('y1',y1);
+    tick.setAttribute('x2',x2); tick.setAttribute('y2',y2);
+    tick.setAttribute('stroke','#94a3b8');
+    tick.setAttribute('stroke-width','2');
+    svg.appendChild(tick);
+
+    const [tx,ty] = toXY(a, R+24);
+    const t = document.createElementNS(svgNS,'text');
+    t.setAttribute('x', tx); t.setAttribute('y', ty);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('dominant-baseline','middle');
+    t.setAttribute('class','tick');
+    t.textContent = v;
+    svg.appendChild(t);
+  }
+
+  // Labels for bands
+  SEGMENTS.forEach(seg=>{
+    const mid = (seg.from + Math.min(seg.to, MAX)) / 2;
+    const a = angleFor(mid);
+    const [lx, ly] = toXY(a, R - 36);
+    const t = document.createElementNS(svgNS,'text');
+    t.setAttribute('x', lx); t.setAttribute('y', ly);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('dominant-baseline','middle');
+    t.setAttribute('class','label');
+    t.setAttribute('fill', '#334155');
+    t.textContent = seg.label;
+    svg.appendChild(t);
+  });
+
+  // Needle (group so we can rotate)
+  const needle = document.createElementNS(svgNS,'g');
+  needle.setAttribute('class','needle');
+  // shaft
+  const shaft = document.createElementNS(svgNS,'path');
+  shaft.setAttribute('d', `M ${CX} ${CY} L ${CX} ${CY-R+24}`);
+  shaft.setAttribute('stroke','#0f172a');
+  shaft.setAttribute('stroke-width','4');
+  shaft.setAttribute('stroke-linecap','round');
+  needle.appendChild(shaft);
+  // hub
+  const hub = document.createElementNS(svgNS,'circle');
+  hub.setAttribute('cx', CX); hub.setAttribute('cy', CY); hub.setAttribute('r', 7);
+  hub.setAttribute('class','hub');
+  needle.appendChild(hub);
+  svg.appendChild(needle);
+
+  // Readout text
+  const read = document.createElementNS(svgNS,'text');
+  read.setAttribute('x', CX);
+  read.setAttribute('y', CY - 24);
+  read.setAttribute('text-anchor','middle');
+  read.setAttribute('class','readout');
+  read.textContent = 'BMI —';
+  svg.appendChild(read);
+
+  // Public updater
+  function setBMI(val){
+    const clamped = Math.max(MIN, Math.min(MAX, val));
+    // animation: little overshoot for delight
+    const target = angleFor(clamped);
+    const current = parseFloat((needle._angle ?? -90));
+    const overshoot = target + Math.sign(target-current) * 6;
+    // 1) quick to overshoot
+    needle.style.transitionDuration = '450ms';
+    needle.style.transform = `rotate(${overshoot}deg)`;
+    needle._angle = overshoot;
+    // 2) settle to final
+    setTimeout(()=>{
+      needle.style.transitionDuration = '600ms';
+      needle.style.transform = `rotate(${target}deg)`;
+      needle._angle = target;
+    }, 460);
+
+    read.textContent = `BMI ${clamped.toFixed(1)}`;
+    dialRoot.setAttribute('aria-label', `BMI ${clamped.toFixed(1)} on dial from ${MIN} to ${MAX}`);
+  }
+
+  // expose globally so existing handler can call it
+  window.__fit_bmi_set = setBMI;
+
+  // init at leftmost
+  needle.style.transform = 'rotate(-90deg)';
+})();
+
+</script>
+
+<!-- =================== PWA SERVICE WORKER =================== -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('sw.js').catch(function(e){});
+    });
+  }
+</script>
+</body>
+</html>
