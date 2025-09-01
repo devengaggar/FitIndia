@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>FitIndia.pro — BMI Calculator</title>
-  <meta name="description" content="BMI calculator and 30-day challenge by FitIndia.pro: personal diet plans, weekly goals, and sustainable Indian health guidance."/>
+  <title>FitIndia.pro — WHR (Waist–Hip Ratio) & 30-Day Plan</title>
   <meta name="theme-color" content="#046a38" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="img/Fit-India-Logo.png" type="image/png" />
@@ -68,6 +67,7 @@
     .card img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:10px;background:#f1f5f9}
     .row{display:grid;grid-template-columns:1fr;gap:10px}
     @media(min-width:900px){.row{grid-template-columns:1fr 1fr}}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
     input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line)}
     .ok{background:#dcfce7;border-color:#bbf7d0}
     .warn{background:#ffedd5;border-color:#fed7aa}
@@ -237,6 +237,7 @@
   <script>
     // Footer year
     (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+
     // Mobile menu toggle
     (function(){
       const btn=document.getElementById('menuBtn');
@@ -244,28 +245,179 @@
       btn?.addEventListener('click',()=>{
         const on=panel.classList.toggle('show');
         btn.setAttribute('aria-expanded', on? 'true':'false');
+        // Close dropdowns when menu closes
+        if(!on){
+          document.getElementById('toolsDropdownMobile')?.classList.remove('open');
+        }
       });
     })();
+
     // Dropdowns (desktop hover + click, mobile tap)
     (function(){
+      // Desktop
       const dd=document.getElementById('toolsDropdown');
       const link=dd?.querySelector('.dropbtn');
       link?.addEventListener('click',(e)=>{ e.preventDefault(); dd.classList.toggle('open'); link.setAttribute('aria-expanded', dd.classList.contains('open')? 'true':'false'); });
       document.addEventListener('click',(e)=>{ if(dd && !dd.contains(e.target)) dd.classList.remove('open'); });
+      // Mobile
       const ddm=document.getElementById('toolsDropdownMobile');
       const linkm=ddm?.querySelector('.dropbtn');
-      linkm?.addEventListener('click',(e)=>{ e.preventDefault(); ddm.classList.toggle('open'); });
+      linkm?.addEventListener('click',(e)=>{ 
+        e.preventDefault(); 
+        ddm.classList.toggle('open'); 
+      });
+      // Close mobile dropdown when clicking outside
+      document.addEventListener('click',(e)=>{
+        if(ddm && !ddm.contains(e.target) && !e.target.closest('#menuBtn')) ddm.classList.remove('open');
+      });
     })();
+
     // =================== PWA SERVICE WORKER ===================
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         navigator.serviceWorker.register('sw.js').catch(function(e){});
       });
     }
-  </script>
-  <!-- (Your main WHR calculator and plan JS goes here, unchanged) -->
-  <script>
-    // ...Paste your WHR calculator and plan builder JS here...
+
+    // =================== WHR CALCULATOR & PLAN BUILDER ===================
+    (function(){
+      // Elements
+      const waist = document.getElementById('waist');
+      const hip = document.getElementById('hip');
+      const sex = document.getElementById('sex');
+      const calcBtn = document.getElementById('calcWHR');
+      const resetBtn = document.getElementById('resetWHR');
+      const whrVal = document.getElementById('whrVal');
+      const whrMsg = document.getElementById('whrMsg');
+      const whrTarget = document.getElementById('whrTarget');
+      const whrDial = document.getElementById('whrDial');
+      const formCard = document.getElementById('formCard');
+      const planSection = document.getElementById('plan');
+      const advice = document.getElementById('advice');
+      const range = document.getElementById('range');
+      const weeklyGoals = document.getElementById('weeklyGoals');
+      const daywise = document.getElementById('daywise');
+      const meals = document.getElementById('meals');
+      const buildPlanBtn = document.getElementById('buildPlan');
+      const resetPlanBtn = document.getElementById('reset');
+      const downloadBtn = document.getElementById('download');
+      // Helper
+      function round2(x){ return Math.round(x*100)/100; }
+      function getWHR(w, h){ return h>0 ? round2(w/h) : 0; }
+      function whrRisk(val, sex){
+        if(sex==='male'){
+          if(val<0.90) return {risk:'ok',msg:'Low risk',target:'Target: < 0.90'};
+          if(val<1.0) return {risk:'warn',msg:'Moderate risk',target:'Target: < 0.90'};
+          return {risk:'risk',msg:'High risk',target:'Target: < 0.90'};
+        }else{
+          if(val<0.80) return {risk:'ok',msg:'Low risk',target:'Target: < 0.80'};
+          if(val<0.85) return {risk:'warn',msg:'Moderate risk',target:'Target: < 0.80'};
+          return {risk:'risk',msg:'High risk',target:'Target: < 0.80'};
+        }
+      }
+      function renderGauge(val, sex){
+        // SVG semi-gauge
+        const min=0.6, max=1.2;
+        const angle = Math.min(180, Math.max(0, (val-min)/(max-min)*180));
+        const color = sex==='male'
+          ? (val<0.9?'#22c55e':val<1?'#f59e42':'#ef4444')
+          : (val<0.8?'#22c55e':val<0.85?'#f59e42':'#ef4444');
+        return `
+        <svg viewBox="0 0 420 240">
+          <path d="M60,210 A150,150 0 0,1 360,210" fill="none" stroke="#e5e7eb" stroke-width="28"/>
+          <path d="M60,210 A150,150 0 0,1 360,210" fill="none" stroke="${color}" stroke-width="20" stroke-dasharray="${angle/180*471},471"/>
+          <circle cx="210" cy="210" r="12" fill="#0f172a"/>
+          <text x="210" y="120" text-anchor="middle" class="readout">${val}</text>
+          <text x="60" y="230" text-anchor="middle" class="tick">0.6</text>
+          <text x="210" y="230" text-anchor="middle" class="tick">0.9</text>
+          <text x="360" y="230" text-anchor="middle" class="tick">1.2</text>
+          <text x="210" y="60" text-anchor="middle" class="label">WHR</text>
+        </svg>`;
+      }
+      // Calculate WHR
+      calcBtn?.addEventListener('click',()=>{
+        const w = parseFloat(waist.value), h = parseFloat(hip.value), s = sex.value;
+        if(!w || !h || w<40 || h<50){
+          whrMsg.textContent = 'Please enter valid waist and hip values.';
+          whrMsg.style.color = '#ef4444';
+          whrVal.style.display = whrTarget.style.display = whrDial.style.display = 'none';
+          resetBtn.style.display = 'none';
+          return;
+        }
+        const val = getWHR(w,h);
+        const risk = whrRisk(val,s);
+        whrVal.textContent = `WHR: ${val}`;
+        whrVal.className = `pill ${risk.risk}`;
+        whrVal.style.display = '';
+        whrMsg.textContent = risk.msg;
+        whrMsg.style.color = (risk.risk==='ok')?'#22c55e':(risk.risk==='warn')?'#f59e42':'#ef4444';
+        whrTarget.textContent = risk.target;
+        whrTarget.style.display = '';
+        whrDial.innerHTML = renderGauge(val,s);
+        whrDial.style.display = '';
+        resetBtn.style.display = '';
+        formCard.style.display = '';
+        // Scroll to form
+        setTimeout(()=>formCard.scrollIntoView({behavior:'smooth'}),300);
+      });
+      resetBtn?.addEventListener('click',()=>{
+        waist.value = hip.value = '';
+        whrVal.style.display = whrTarget.style.display = whrDial.style.display = 'none';
+        whrMsg.textContent = '';
+        resetBtn.style.display = 'none';
+        formCard.style.display = 'none';
+      });
+      // Plan builder
+      buildPlanBtn?.addEventListener('click',()=>{
+        // Get values
+        const name = document.getElementById('name').value.trim();
+        const age = document.getElementById('age').value.trim();
+        const diet = document.getElementById('diet').value;
+        const restrict = document.getElementById('restrict').value.trim();
+        // Simple plan logic
+        advice.textContent = "Stay consistent! Small daily steps matter most.";
+        range.textContent = "Aim for 7,000–10,000 steps/day, 30 min activity, 7+ hrs sleep.";
+        weeklyGoals.innerHTML = `
+          <li>Walk 5 days/week (7,000+ steps)</li>
+          <li>Strength or yoga 2 days/week</li>
+          <li>Follow meal template below</li>
+          <li>Track sleep & water</li>
+        `;
+        daywise.innerHTML = `
+          <ul>
+            <li>Mon–Fri: Walk 30 min, meal plan, 7+ hrs sleep</li>
+            <li>Sat: Yoga/strength, meal plan, 7+ hrs sleep</li>
+            <li>Sun: Rest, meal plan, 7+ hrs sleep</li>
+          </ul>
+        `;
+        meals.innerHTML = `
+          <ul>
+            <li>Breakfast: Poha/upma/dosa + fruit</li>
+            <li>Lunch: Roti/rice + dal + sabzi + salad</li>
+            <li>Snack: Buttermilk/fruit/nuts</li>
+            <li>Dinner: Khichdi/roti-sabzi/dal-chawal</li>
+          </ul>
+          <p class="muted" style="margin-top:6px">Customise for ${diet}${restrict?', '+restrict:''}.</p>
+        `;
+        planSection.style.display = '';
+        setTimeout(()=>planSection.scrollIntoView({behavior:'smooth'}),300);
+      });
+      resetPlanBtn?.addEventListener('click',()=>{
+        planSection.style.display = 'none';
+      });
+      downloadBtn?.addEventListener('click',()=>{
+        let txt = "FitIndia.pro 30-Day Plan\n\n";
+        txt += advice.textContent + "\n" + range.textContent + "\n\n";
+        txt += "Weekly Goals:\n" + weeklyGoals.textContent + "\n\n";
+        txt += "Day-wise Schedule:\n" + daywise.textContent + "\n\n";
+        txt += "Meal Template:\n" + meals.textContent.replace(/\n+/g,'\n');
+        const blob = new Blob([txt],{type:'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = "FitIndia_30DayPlan.txt";
+        a.click();
+      });
+    })();
   </script>
 </body>
 </html>
