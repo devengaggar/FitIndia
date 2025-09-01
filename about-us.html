@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FitIndia.pro — About Us</title>
+<meta name="description" content="About FitIndia.pro: mission, principles, and promise."/>
+<meta name="theme-color" content="#046a38" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="img/Fit-India-Logo.png" type="image/png" />
+<style>
+  :root{
+    --white:#ffffff; --offwhite:#e2e2e2;
+    --ink:#0f172a; --muted:#475569; --line:#e5e7eb;
+    --green:#046a38; --orange:#ff671f; --yellow:#fde047;
+    --navy:#000080; --blue:#6991ff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:#fff;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;height:auto;display:block}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 16px}
+  .nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:90;height:60px}
+  .nav-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand-logo{position:relative;height:100%;width:15%}
+  .brand-logo img{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:60px;width:auto;display:block;margin:0}
+  .tabs{display:none;gap:12px;align-items:center;flex-wrap:wrap}
+  .tabs a{padding:8px 10px;border-radius:10px;color:var(--muted);font-weight:700;line-height:1}
+  .tabs a:hover{background:#f8fafc;color:#0b1324}
+  .tabs a.active{background:#eef2ff;color:#0b1324}
+  .dropdown{position:relative;display:inline-block}
+  .dropbtn{display:inline-block;padding:8px 10px;border-radius:10px;color:var(--muted);font-weight:700}
+  .dropbtn:hover{background:#f8fafc;color:#0b1324}
+  .dropdown-content{display:none;position:absolute;top:100%;left:0;background:#fff;min-width:160px;box-shadow:0 4px 8px rgba(0,0,0,.08);border:1px solid var(--line);border-radius:8px;z-index:999}
+  .dropdown-content a{display:block;padding:10px 12px;color:var(--muted);font-weight:600;border-radius:6px}
+  .dropdown-content a:hover{background:#f8fafc;color:#0b1324}
+  .dropdown.open .dropdown-content{display:block}
+  .hamburger{display:inline-flex;gap:6px;flex-direction:column;padding:10px;border:0;background:transparent}
+  .hamburger span{width:24px;height:2px;background:#0f172a;border-radius:2px}
+  .mobile-menu{position:fixed;inset:60px 0 auto 0;background:#fff;border-bottom:1px solid var(--line);display:none;padding:12px 16px}
+  .mobile-menu a{display:block;padding:12px 8px;border-radius:8px}
+  .mobile-menu .dropdown{display:block}
+  .mobile-menu.show{display:block}
+  @media(min-width:900px){
+    .hamburger{display:none}
+    .tabs{display:flex}
+    .mobile-menu{display:none!important}
+  }
+  .hero{background:linear-gradient(180deg,#fff,var(--blue) 100%)}
+  .hero-grid{display:grid;grid-template-columns:1fr;gap:20px;padding:36px 0}
+  h1{font-size:clamp(1.7rem,3.6vw,2.6rem);margin:0 0 10px}
+  .sub{color:#0b1324b0}
+  .hero-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
+  .cta{display:grid;grid-template-columns:1fr;gap:10px}
+  .btn{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer;text-align:center}
+  .btn.primary{background:var(--ink);color:#fff;border-color:transparent}
+  @media(min-width:900px){
+    .hero-grid{grid-template-columns:1.2fr .8fr}
+    .cta{grid-template-columns:auto auto}
+  }
+  section{padding:40px 0;border-bottom:1px solid var(--line)}
+  .section-title{font-size:clamp(1.2rem,2.3vw,1.7rem);margin:0 0 12px;display:flex;align-items:center;gap:10px}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 6px rgba(253,224,71,.35)}
+  .muted{color:var(--muted)}
+  .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f8fafc;border:1px solid var(--line);font-weight:700;color:var(--muted)}
+  .card{background:#f1f5f9;border:1px solid var(--line);border-radius:16px;padding:16px}
+  .card img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:10px;background:#f1f5f9}
+  footer{background:#0b1324;color:#dbeafe}
+  .foot{display:grid;grid-template-columns:1fr;gap:20px;padding:28px 0}
+  @media(min-width:900px){.foot{grid-template-columns:2fr 1fr 1fr}}
+  .social{display:flex;gap:12px;flex-wrap:wrap}
+  .social a{display:inline-flex;align-items:center;gap:6px;background:#0a1228;border:1px solid #1e3a8a;border-radius:999px;padding:6px 10px;color:#c7d2fe}
+  .credit{border-top:1px solid #172554;padding:12px 0;color:#9db2d8}
+  html,body{overflow-x:hidden}
+  section[id]{scroll-margin-top:70px}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav class="nav" aria-label="Primary">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="brand-logo" aria-label="FitIndia Home">
+      <img src="img/Fit-India-Logo.png" alt="FitIndia.pro logo">
+    </a>
+    <button class="hamburger" id="menuBtn" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="tabs" role="navigation" aria-label="Primary links">
+      <a id="homeTop" href="index.html">Home</a>
+      <a id="servicesTop" href="services.html">Services</a>
+      <a id="announcementsTop" href="Announcements.html">Announcements</a>
+      <div class="dropdown" id="toolsDropdown">
+        <a href="#" class="dropbtn" aria-haspopup="true" aria-expanded="false">Tools ▾</a>
+        <div class="dropdown-content" role="menu">
+          <a id="navBMI" href="Bmi-cal.html" role="menuitem">BMI</a>
+          <a id="navWHR" href="WHR.html" role="menuitem">WHR</a>
+        </div>
+      </div>
+      <a id="aboutTop" href="about-us.html">About Us</a>
+    </div>
+  </div>
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="mobile-menu" role="dialog" aria-label="Main menu">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="Announcements.html">Announcements</a>
+    <div class="dropdown" id="toolsDropdownMobile">
+      <a href="#" class="dropbtn">Tools ▾</a>
+      <div class="dropdown-content">
+        <a href="Bmi-cal.html">BMI</a>
+        <a href="WHR.html">WHR</a>
+      </div>
+    </div>
+    <a href="about-us.html">About Us</a>
+  </div>
+</nav>
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>What is FitIndia.pro</h1>
+      <p class="sub">We build practical health tools for Indian lifestyles — consistent meals, daily movement, quality sleep, and supportive habits.</p>
+    </div>
+    <div class="hero-card">
+      <h3 style="margin:0 0 8px">Our Promise</h3>
+      <ul style="margin:0 0 8px 18px;line-height:1.65">
+        <li>Evidence over hype — no fad diets</li>
+        <li>Personalised plans that fit your day</li>
+        <li>Respect for culture & preferences</li>
+      </ul>
+    </div>
+  </div>
+</header>
+<!-- ABOUT FITINDIA -->
+<section id="about-fitindia">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>About FitIndia.pro</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+      <span class="pill">Indian-first</span>
+      <span class="pill">Evidence-based</span>
+      <span class="pill">AI Calorie Tracker</span>
+      <span class="pill">Clinician-guided</span>
+    </div>
+    <div class="card" style="padding:18px">
+      <p><strong>FitIndia.pro</strong> is India’s first truly <em>practical, evidence-based</em> health companion—one built for your plate, your pace, and your busy routine.</p>
+      <p>We believe staying healthy shouldn't demand lifestyle upheaval. So instead of calorie-counting by Western standards, we bring health strategies rooted in Indian daily life:</p>
+      <ul style="line-height:1.8;margin-left:18px">
+        <li><strong>Everyday Indian meals</strong>, not fancy grocery hauls—think roti–sabzi, dal–chawal, idli, and one-pot Indian meals.</li>
+        <li><strong>Guidance from clinical nutrition experts</strong>, not influencers—professionally designed plans that incorporate BMI, Waist-Hip Ratios, step goals, and mental wellbeing.</li>
+        <li><strong>No overwhelm</strong>: day-wise plans with weekly goals, gentle WhatsApp nudges, and a free AI calorie tracker that works with your meal photos or descriptions.</li>
+        <li><strong>Affordable & accessible</strong>: no hidden calculators, no premium lockdowns. Light, mobile-friendly design for tier-2 & tier-3 users, too.</li>
+        <li><strong>Community-powered motivation</strong>: local 7- and 30-day challenges, and India’s first obesity-focused healthcare ecosystem—expanding with clinics, pharma, and fitness partners.</li>
+      </ul>
+      <p>Whether you're juggling work, family, and meals—FitIndia.pro makes health <strong>doable, Indian, and sustainable</strong>.</p>
+    </div>
+  </div>
+</section>
+<section id="our-vision">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>Our Vision</h2>
+    <div class="card" style="padding:18px">  
+      <p>
+        To make India healthier, one person at a time, by becoming the country’s most trusted 
+        digital ecosystem for <strong>obesity prevention, treatment, and long-term weight management</strong>.
+        We aim to <strong>bridge the gap between healthcare expertise and everyday lifestyle</strong>—so that 
+        anyone, anywhere in India, can access the right tools, care, and community to achieve lasting wellness.
+      </p>
+    </div>
+  </div>
+</section>
+<section id="our-mission">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>Our Mission</h2>
+    <div class="card" style="padding:18px">   
+      <ul style="line-height:1.8;margin-left:18px">
+        <li>Empower <strong>10,000+ Indians by 2025</strong> with sustainable, evidence-based obesity care.</li>
+        <li>Combine <strong>medical expertise with technology</strong>, making weight management simple, personalized, and accessible.</li>
+        <li>Partner with <strong>doctors, nutritionists, and healthcare leaders</strong>, creating India’s first integrated obesity-care platform.</li>
+        <li>Foster a <strong>supportive community</strong> through challenges, education, and motivation—helping individuals stay consistent and inspired.</li>
+        <li>Set <strong>global benchmarks</strong> in digital obesity management rooted in Indian lifestyle and culture.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- FOOTER -->
+<footer>
+  <div class="wrap foot">
+    <div>
+      <h3 style="margin:0 0 8px">FitIndia.pro</h3>
+      <p>Your partner in evidence-based weight care.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul style="list-style:none;padding:0;line-height:1.9">
+        <li><a href="about-us.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="Announcements.html">Announcements</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Follow us</h4>
+      <div class="social">
+        <a href="https://instagram.com/fitindia.pro" target="_blank" rel="noopener">📸 Instagram</a>
+        <a href="https://www.linkedin.com/company/fitindia-pro" target="_blank" rel="noopener">💼 LinkedIn</a>
+        <a href="https://facebook.com/fitindia.pro" target="_blank" rel="noopener">📘 Facebook</a>
+        <a href="https://wa.me/0000000000" target="_blank" rel="noopener">💬 WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap credit">© <span id="year"></span> FitIndia.pro • All rights reserved.</div>
+</footer>
+<script>
+  // Footer year
+  (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+  // Mobile menu toggle
+  (function(){
+    const btn=document.getElementById('menuBtn');
+    const panel=document.getElementById('mobileMenu');
+    btn?.addEventListener('click',()=>{
+      const on=panel.classList.toggle('show');
+      btn.setAttribute('aria-expanded', on? 'true':'false');
+    });
+  })();
+  // Dropdowns (desktop hover + click, mobile tap)
+  (function(){
+    const dd=document.getElementById('toolsDropdown');
+    const link=dd?.querySelector('.dropbtn');
+    link?.addEventListener('click',(e)=>{ e.preventDefault(); dd.classList.toggle('open'); link.setAttribute('aria-expanded', dd.classList.contains('open')? 'true':'false'); });
+    document.addEventListener('click',(e)=>{ if(dd && !dd.contains(e.target)) dd.classList.remove('open'); });
+    const ddm=document.getElementById('toolsDropdownMobile');
+    const linkm=ddm?.querySelector('.dropbtn');
+    linkm?.addEventListener('click',(e)=>{ e.preventDefault(); ddm.classList.toggle('open'); });
+  })();
+  // =================== PWA SERVICE WORKER ===================
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('sw.js').catch(function(e){});
+    });
+  }
+</script>
+</body>
+</html>
