@@ -231,39 +231,32 @@
 </footer>
 <script>
   // Footer year
-  (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
-  // Mobile menu toggle
-  (function(){
-    const btn=document.getElementById('menuBtn');
-    const panel=document.getElementById('mobileMenu');
-    btn?.addEventListener('click',()=>{
-      const on=panel.classList.toggle('show');
-      btn.setAttribute('aria-expanded', on? 'true':'false');
-      // Close dropdowns when menu closes
-      if(!on){
-        document.getElementById('toolsDropdownMobile')?.classList.remove('open');
-      }
-    });
-  })();
-  // Dropdowns (desktop hover + click, mobile tap)
-  (function(){
-    // Desktop
-    const dd=document.getElementById('toolsDropdown');
-    const link=dd?.querySelector('.dropbtn');
-    link?.addEventListener('click',(e)=>{ e.preventDefault(); dd.classList.toggle('open'); link.setAttribute('aria-expanded', dd.classList.contains('open')? 'true':'false'); });
-    document.addEventListener('click',(e)=>{ if(dd && !dd.contains(e.target)) dd.classList.remove('open'); });
-    // Mobile
-    const ddm=document.getElementById('toolsDropdownMobile');
-    const linkm=ddm?.querySelector('.dropbtn');
-    linkm?.addEventListener('click',(e)=>{ 
-      e.preventDefault(); 
-      ddm.classList.toggle('open'); 
-    });
-    // Close mobile dropdown when clicking outside
-    document.addEventListener('click',(e)=>{
-      if(ddm && !ddm.contains(e.target) && !e.target.closest('#menuBtn')) ddm.classList.remove('open');
-    });
-  })();
+    (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+    // Mobile menu toggle
+    (function(){
+      const btn=document.getElementById('menuBtn');
+      const panel=document.getElementById('mobileMenu');
+      btn?.addEventListener('click',()=>{
+        const on=panel.classList.toggle('show');
+        btn.setAttribute('aria-expanded', on? 'true':'false');
+      });
+    })();
+    // Dropdowns: open on hover (desktop) and tap (mobile)
+    (function(){
+      const dd=document.getElementById('toolsDropdown');
+      const link=dd?.querySelector('.dropbtn');
+      link?.addEventListener('click',(e)=>{
+        e.preventDefault();
+        dd.classList.toggle('open');
+        link.setAttribute('aria-expanded', dd.classList.contains('open')? 'true':'false');
+      });
+      const ddm=document.getElementById('toolsDropdownMobile');
+      const linkm=ddm?.querySelector('.dropbtn');
+      linkm?.addEventListener('click',(e)=>{ e.preventDefault(); ddm.classList.toggle('open'); });
+      document.addEventListener('click',(e)=>{
+        if(dd && !dd.contains(e.target)) dd.classList.remove('open');
+      });
+    })();
   // =================== PWA SERVICE WORKER ===================
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
