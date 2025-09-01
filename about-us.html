@@ -93,44 +93,47 @@
   </style>
 </head>
 <body>
-<!-- NAV -->
-<nav class="nav" aria-label="Primary">
-  <div class="wrap nav-inner">
-    <a href="index.html" class="brand-logo" aria-label="FitIndia Home">
-      <img src="img/Fit-India-Logo.png" alt="FitIndia.pro logo">
-    </a>
-    <button class="hamburger" id="menuBtn" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="tabs" role="navigation" aria-label="Primary links">
-      <a id="homeTop" href="index.html">Home</a>
-      <a id="servicesTop" href="services.html">Services</a>
-      <a id="announcementsTop" href="Announcements.html">Announcements</a>
-      <div class="dropdown" id="toolsDropdown">
-        <a href="#" class="dropbtn" aria-haspopup="true" aria-expanded="false">Tools ▾</a>
-        <div class="dropdown-content" role="menu">
-          <a id="navBMI" href="Bmi-cal.html" role="menuitem">BMI</a>
-          <a id="navWHR" href="WHR.html" role="menuitem">WHR</a>
+  <!-- NAV -->
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav-inner">
+      <a href="index.html" class="brand-logo" aria-label="FitIndia Home">
+        <img src="img/Fit-India-Logo.png" alt="FitIndia.pro logo">
+      </a>
+      <button class="hamburger" id="menuBtn" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="tabs" role="navigation" aria-label="Primary links">
+        <a id="homeTop" href="index.html">Home</a>
+        <a id="servicesTop" href="services.html">Services</a>
+        <a id="announcementsTop" href="Announcements.html">Announcements</a>
+        <div class="dropdown" id="toolsDropdown">
+          <a href="#" class="dropbtn" aria-haspopup="true" aria-expanded="false">Tools ▾</a>
+          <div class="dropdown-content" role="menu">
+            <a id="navBMI" href="Bmi-cal.html" role="menuitem">BMI</a>
+            <a id="navWHR" href="WHR.html" role="menuitem">WHR</a>
+          </div>
+          <button id="installBtn" style="display:none;margin-left:12px">Install App</button>
+        </div>
+        <a id="aboutTop" href="about-us.html">About Us</a>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="mobile-menu" role="dialog" aria-label="Main menu">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="Announcements.html">Announcements</a>
+      <div class="dropdown" id="toolsDropdownMobile">
+        <a href="#" class="dropbtn">Tools ▾</a>
+        <div class="dropdown-content">
+          <a href="Bmi-cal.html">BMI</a>
+          <a href="WHR.html">WHR</a>
         </div>
       </div>
-      <a id="aboutTop" href="about-us.html" class="active">About Us</a>
+      <a href="about-us.html">About Us</a>
+       <button id="installBtn" style="display:none;margin-top:10px;width:100%">Install App</button>
+</div>
     </div>
-  </div>
-  <!-- Mobile menu -->
-  <div id="mobileMenu" class="mobile-menu" role="dialog" aria-label="Main menu">
-    <a href="index.html">Home</a>
-    <a href="services.html">Services</a>
-    <a href="Announcements.html">Announcements</a>
-    <div class="dropdown" id="toolsDropdownMobile">
-      <a href="#" class="dropbtn">Tools ▾</a>
-      <div class="dropdown-content">
-        <a href="Bmi-cal.html">BMI</a>
-        <a href="WHR.html">WHR</a>
-      </div>
-    </div>
-    <a href="about-us.html" class="active">About Us</a>
-  </div>
-</nav>
+  </nav>
 <!-- HERO -->
 <header class="hero">
   <div class="wrap hero-grid">
